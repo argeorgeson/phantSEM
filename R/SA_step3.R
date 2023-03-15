@@ -4,6 +4,7 @@
 #' @param step2 The object returned from SA_step2.
 #' @param n The sample size.
 #' @returns A list of parameter estimates from each test covariance matrix.
+#' @import lavaan
 #' @export
 
 
@@ -23,7 +24,7 @@ SA_step3 <- function(step2,n){
   sumlist <- list(NA)
   for (i in 1:nrow(combos)){
     if (corlist[[i]][2]==TRUE){
-      sumlist[[i]]=parameterEstimates(sem(model=mod_phant,sample.cov = covlist[[i]],sample.nobs = n))
+      sumlist[[i]]=lavaan::parameterEstimates(lavaan::sem(model=mod_phant,sample.cov = covlist[[i]],sample.nobs = n))
     } else {sumlist[[i]] = c("NPD")}
   }
   return(list(sumlist,corlist,covlist, combos))
