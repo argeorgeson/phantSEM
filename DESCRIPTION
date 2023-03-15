@@ -1,10 +1,10 @@
 Package: ghostR
-Title: An R Package for Sensitivity Analyses with Phantom Variables (One Line, Title Case)
+Title: An R Package for Sensitivity Analyses with Phantom Variables
 Version: 0.0.0.9000
 Authors@R: 
     person("Alexis", "Georgeson", , "georgeson.alexis@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: This package allows you to create phantom variables to assess temporal bias or confounding bias in SEM models that do not have a mean structure.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
