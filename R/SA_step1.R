@@ -1,17 +1,18 @@
 #' Sensitivity Analysis Function Step 1
-#' 
-#' This function generates the phantom variables and the names for their covariance parameters that will be used in SA_step2(). 
+#'
+#' This function generates the phantom variables and the names for their covariance parameters that will be used in SA_step2().
 #' @param lavoutput The lavaan output object output from lavaan functions sem() or lavaan() when fitting your observed model.
-#' @param mod_obs A lavaan syntax for the observed model. 
-#' @param mod_phant A lavaan syntax for the phantom variable model. 
-#' @returns a list containing the names of all phantom covariance parameters  
+#' @param mod_obs A lavaan syntax for the observed model.
+#' @param mod_phant A lavaan syntax for the phantom variable model.
+#' @returns a list containing the names of all phantom covariance parameters
+#' @export
 #' SA_step1()
 
 SA_step1 <- function(lavoutput, #lavaan object
                      mod_obs, # lavaan syntax for observe model
-                     mod_phant #model with phantom variables 
+                     mod_phant #model with phantom variables
                      ){
-  
+
 fit = lavoutput
 
 C <- fit@SampleStats@cov[[1]]
@@ -38,13 +39,13 @@ var_phant <- c(var_obs,c(rep(1,length(phantom_names))))
 
 matrix = newmat
 
-# put cov names into the matrix 
+# put cov names into the matrix
 parname <- c()
 for (i in 1:nrow(newmat)) {
   for (j in 1:ncol(newmat)){
     if (is.na(newmat[i,j]) & i==j) {
       tn <-(paste0("Var",rownames(newmat)[i],colnames(newmat)[j]))
-      newmat[i,j]=tn 
+      newmat[i,j]=tn
       parname <- c(parname,tn)
     }
     else if (is.na(newmat[i,j]) & i>j) {
@@ -54,10 +55,10 @@ for (i in 1:nrow(newmat)) {
     }
     else if (is.na(newmat[i,j]) & i<j) {
      tn = (paste0("Cov",rownames(newmat)[j],colnames(newmat)[i]))
-     newmat[i,j]=tn 
+     newmat[i,j]=tn
      parname <- c(parname,tn)
     }
-  } 
+  }
 }
 
 namemat <- newmat
