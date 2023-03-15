@@ -19,8 +19,8 @@ C <- fit@SampleStats@cov[[1]]
 colnames(C) <- fit@Data@ov.names[[1]]
 var_obs <- diag(C)
 
-obsvar<- unique(c(lavParseModelString(mod_obs)$lhs,lavParseModelString(mod_obs)$rhs))
-SAvar <- unique(c(lavParseModelString(mod_phant)$lhs,lavParseModelString(mod_phant)$rhs))
+obsvar<- unique(c(lavaan::lavParseModelString(mod_obs)$lhs,lavParseModelString(mod_obs)$rhs))
+SAvar <- unique(c(lavaan::lavParseModelString(mod_phant)$lhs,lavParseModelString(mod_phant)$rhs))
 
 
 # find the variables that are new in the phantom model -- those are the phantom vars
