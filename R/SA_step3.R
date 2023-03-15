@@ -17,7 +17,7 @@ SA_step3 <- function(step2,n){
 
   # indices of NA in matrix
 
-  naind <- which((is.na(matrix)&lower.tri(matrix)),arr.ind=TRUE)
+ # naind <- which((is.na(matrix)&lower.tri(matrix)),arr.ind=TRUE)
 
 
 
