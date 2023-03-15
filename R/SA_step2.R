@@ -7,6 +7,8 @@
 #' @param test_values A list of seq() to try for each parameter.  If you are constraining certain parameters to be equal, you will put these in a list. See example.
 #' @param step1 The object created in `SA_step1()`
 #' @returns A list containing test covariance matrices that the phantom model will be fit to.
+#' @import corpcor
+#' @import lavaan
 #' @export
 SA_step2 <- function(fixed_names, #covariances fixed to single values
                      fixed_values, #values that you fix variables to

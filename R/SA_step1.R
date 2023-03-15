@@ -28,7 +28,7 @@ SAvar <- unique(c(lavaan::lavParseModelString(mod_phant)$lhs,lavaan::lavParseMod
 phantom_names <- setdiff(SAvar,obsvar)
 
 newmat <- matrix(NA,nrow=length(SAvar),ncol=length(SAvar))
-newmat[1:length(obsvar),1:length(obsvar)]= cov2cor(C)
+newmat[1:length(obsvar),1:length(obsvar)]= stats::cov2cor(C)
 
 #newnames <- c(fit@Data@ov.names[[1]],phantom_names)
 #simpnames <- gsub(mediator,"M",oldnames[[2]])

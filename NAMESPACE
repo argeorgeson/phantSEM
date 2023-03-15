@@ -3,4 +3,5 @@
 export(SA_step1)
 export(SA_step2)
 export(SA_step3)
+import(corpcor)
 import(lavaan)
