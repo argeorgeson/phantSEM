@@ -82,9 +82,9 @@ message("Choose which values you want to use for your fixed parameters and put t
 return(list(matrix_template = matrix,
             Phantom_covs=parname,
             named_matrix=namemat,
-            new_matrix=newmat,
+            obs_matrix_phant_names=newmat,
             mod_phant=mod_phant,
-            phantom_variables=var_phant))
+            variances=var_phant))
 }
 
 
