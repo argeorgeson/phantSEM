@@ -5,6 +5,7 @@
 #' @param mod_obs A lavaan syntax for the observed model.
 #' @param mod_phant A lavaan syntax for the phantom variable model.
 #' @returns a list containing the names of all phantom covariance parameters.
+#' @import lavaan
 #' @export
 #'
 
