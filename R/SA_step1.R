@@ -79,7 +79,12 @@ message("Here are the observed covariance matrix parameters:")
 #print(sort(namemat[lower.tri(namemat)]))
 print(sort(setdiff(namemat[lower.tri(namemat)],unique(parname))))
 message("Choose which values you want to use for your fixed parameters and put their names in a vector (fixed_values). Make sure the order is the same for both vectors.")
-return(list(matrix,parname,namemat,newmat,mod_phant,var_phant))
+return(list(matrix_template = matrix,
+            Phantom_covs=parname,
+            named_matrix=namemat,
+            new_matrix=newmat,
+            mod_phant=mod_phant,
+            phantom_variables=var_phant))
 }
 
 

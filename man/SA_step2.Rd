@@ -17,9 +17,9 @@ SA_step2(
 
 \item{fixed_values}{A vector containing either single values or the names of other known parameters that you will fix each parameter in fixed_names to.}
 
-\item{test_names}{A list or list of lists containing the names of the covariances that will be varied. If you wish to constrain certain parameters to be equal, you will need to put the names of these parameters in the same list and this argument will be a list of lists.}
+\item{test_names}{A list of vectors containing the names of the covariances that will be varied. If you wish to constrain certain parameters to be equal, you will need to put the names of these parameters in the same vector.}
 
-\item{test_values}{A list or list of lists of values to try for each parameter.  If you are constraining certain parameters to be equal, you will put these in a list. See example.}
+\item{test_values}{A list of seq() to try for each parameter.  If you are constraining certain parameters to be equal, you will put these in a list. See example.}
 
 \item{step1}{The object created in \code{SA_step1()}}
 }

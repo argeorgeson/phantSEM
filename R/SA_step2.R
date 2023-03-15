@@ -3,8 +3,8 @@
 #' `SA_step2()` is used to assign values to the phantom covariances. There are three options for assigning values to the phantom covariances: 1. Fix phantom covariance to a numeric value (i.e., 0 or 1), 2. Fix phantom covariance to be equal to another covariance, or 3. Test different values for the phantom covariance.
 #' @param fixed_names this is a vector of the covariance parameter names that will be fixed to a single value
 #' @param fixed_values A vector containing either single values or the names of other known parameters that you will fix each parameter in fixed_names to.
-#' @param test_names A list or list of lists containing the names of the covariances that will be varied. If you wish to constrain certain parameters to be equal, you will need to put the names of these parameters in the same list and this argument will be a list of lists.
-#' @param test_values A list or list of lists of values to try for each parameter.  If you are constraining certain parameters to be equal, you will put these in a list. See example.
+#' @param test_names A list of vectors containing the names of the covariances that will be varied. If you wish to constrain certain parameters to be equal, you will need to put the names of these parameters in the same vector.
+#' @param test_values A list of seq() to try for each parameter.  If you are constraining certain parameters to be equal, you will put these in a list. See example.
 #' @param step1 The object created in `SA_step1()`
 #' @returns A list containing test covariance matrices that the phantom model will be fit to.
 #' @export
