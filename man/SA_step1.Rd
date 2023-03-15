@@ -14,9 +14,8 @@ SA_step1(lavoutput, mod_obs, mod_phant)
 \item{mod_phant}{A lavaan syntax for the phantom variable model.}
 }
 \value{
-a list containing the names of all phantom covariance parameters
-SA_step1()
+a list containing the names of all phantom covariance parameters.
 }
 \description{
-This function generates the phantom variables and the names for their covariance parameters that will be used in SA_step2().
+\code{SA_step1()} identifies the phantom variables and generates names for their covariance parameters that will be used in SA_step2().
 }

@@ -7,11 +7,13 @@
 SA_step3(step2, n)
 }
 \arguments{
-\item{step2}{the object returned from SA_step2.}
+\item{step2}{The object returned from SA_step2.}
 
-\item{n}{the sample size.
-SA_step3()}
+\item{n}{The sample size.}
+}
+\value{
+A list of parameter estimates from each test covariance matrix.
 }
 \description{
-This function computes the parameter estimates in your phantom model defined in step 1 for the different values provided.
+\code{SA_step3()} computes the parameter estimates in your phantom model defined in step 1 for the different values provided.
 }
