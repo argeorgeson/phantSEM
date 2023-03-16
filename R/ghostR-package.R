@@ -1,6 +1,6 @@
 #' @keywords internal
 "_PACKAGE"
-#' @docType package
-#' @name ghostR
-#'
+
+## usethis namespace: start
+## usethis namespace: end
 NULL
