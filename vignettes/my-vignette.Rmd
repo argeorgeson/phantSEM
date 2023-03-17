@@ -1,0 +1,130 @@
+---
+title: "ghostR"
+output: rmarkdown::html_vignette
+description: 
+  Learn how to use the functions `SA_step1` `SA_step2` and `SA_step3` to conduct a sensitivity   analysis using phantom variables.  
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction 
+
+This vignette describes the use of the functions `SA_step1` `SA_step2` and `SA_step3`. The goal of these functions are to conduct a sensitivity analysis with phantom variables.  Phantom variables are variables that you did  not observe, but that you can specify in a structural equation model by specifying the variance and covariances of the phantom variable with other variables. Creating a single phantom variable is fairly straightforward in the R package `lavaan`. There are scenarios where a researcher may wish to see how the results from an analysis might differ if they had observed additional variables. For instance, a researcher may want to assess whether a certain regression coefficient would be statistically significant if they had controlled for another variable in their analysis. Because the researcher does not know how this phantom variable covaries with the variables they did observe, it would be useful to try different values for the covariances in a sensitivity analysis.  The `ghostR` package is built for researchers to test different values for the covariances between their phantom variables and observed variables. 
+
+In this vignette, a full example is illustrated using the functions of `ghostR`.
+
+## Cross-sectional Mediation 
+The example that we will use to illustrate the use of `ghostR` is one in which we have fit a cross-sectional mediation model and would like to see if our estimates of the mediated effect would hold if we had collected an additional wave of data.  To start, we will load the packages we need. 
+```{r setup, message=FALSE, results="hide"}
+devtools::install_github("argeorgeson/ghostR")
+library(ghostR)
+library(lavaan)
+
+```
+The example we use is based on a memory study described by MacKinnon et al., (2018). Participants in the study were given a list of words and were randomly assigned to either make mental images of the words, or repeat the words.  The individuals were then asked to recall as many words from the list as they could.  Therefore, the predictor X was the condition (1=imagery, 0=repetition), the mediator M was the extent to which they used mental imagery and the outcome Y was the number of words they recalled. 
+
+We first define a 3 x 3 cross-sectional covariance matrix 
+```{r}
+memory_CrossSectional <- matrix(c(1, .638, .258, 
+                                  .638, 1, .271, 
+                                  .258, .271, 1),nrow=3, byrow=T)
+colnames(memory_CrossSectional) <- c("X","M2","Y2")
+
+```
+
+Next, we fit a single-mediator model to the covariance matrix.  The model is defined using lavaan syntax. 
+```{r}
+Observed_Model <- '
+M2 ~ X
+Y2 ~ M2+X
+'
+
+fit_obs <- sem(model=Observed_Model,sample.cov=memory_CrossSectional, sample.nobs = 138)
+
+```
+
+We now define the model with phantom variables for M and Y using lavaan syntax. It is very important to add labels to the parameters that will be of interest for the sensitivity analysis.  For this example, the a-path, b-path and c'-path may be of interest. 
+
+```{r}
+Phantom_Model <- '
+M2 ~ M1 + Y1 + a*X 
+Y2 ~ M1 + Y1 + b*M2 + cp*X 
+'
+```
+
+we now have the necessary parts for the first step of the sensitivity analysis. 
+
+### `SA_step1`
+The purpose of this function is to determine which variables are the phantom variables and provide the covariance parameters involving the phantom variables so that the user can enter them into the next step. 
+
+```{r}
+Step1 <- SA_step1(lavoutput=fit_obs, 
+                  mod_obs = Observed_Model,
+                  mod_phant = Phantom_Model)
+```
+
+This function prints the names of the phantom covariance parameters which will be used in the next function. Those parameters are: "CovM1M2","CovM1X","CovM1Y2","CovY1M1","CovY1M2","CovY1X","CovY1Y2","VarM1M1","VarY1Y1".  The function also provides the names of the observed covariance parameters for the user's reference. 
+
+### SA_step2 
+The second step of the sensitivity analysis is to create covariance matrices that the phantom model will be fit to. To do this, the user must provide information about how the phantom variables covary with the observed variables.  For this example, the user may wish to test different values for "CovM1M2", "CovY1Y2", "CovY1M2" and "CovM1Y2" and fix the other phantom covariances to single values. The easiest way to create the arguments for SA_step2 is to copy and paste the list of parameter names from SA_step1 and remove the names of the parameters they want to vary. 
+
+```{r}
+fixed_names <- c("CovM1X",
+                 "CovY1M1",
+                 "CovY1X",
+                 "VarM1M1",
+                 "VarY1Y1")
+```
+
+Now that the phantom parameters that will be fixed to single values have been put into a vector, the user must define a vector of the same length that provides the values that these parameters will be fixed at. For this example, random assignment would suggest that CovM1X and CovY1X would be zero and the variances for the phantom variables can be set at 1. That leaves CovY1M1, which can be fixed to be equal to CovY2M2
+```{r}
+fixed_values <- c(0, "CovY2M2", 0, 1, 1)
+```
+The next arguments that the user has to define are the parameters that will be varied. This is done by creating a list of the names of the parameters. If we wanted to vary all four of these parameters, we could write this argument as follows: 
+
+```{r}
+test_names <- list("CovM1M2", "CovY1Y2", "CovY1M2","CovM1Y2")
+
+```
+
+However, suppose that we would like to allow CovM1M2 and CovY1Y2 to be equal and CovY1M2 and CovM1Y2 to be equal. we can choose that option by writing the test_names list as follows: 
+
+```{r}
+test_names <- list(c("CovM1M2","CovY1Y2"),c("CovY1M2","CovM1Y2"))
+
+
+```
+
+The next argument tells the function a sequence of values to use for the parameters.  The user could provide a vector of values, or a sequence using `seq()`.  
+
+```{r}
+test_values <- list (seq(0,.6,.1),seq(-.6,.6,.1))
+```
+
+Now we are ready to use `SA_step2` 
+
+```{r}
+Step2 <- SA_step2(fixed_names=fixed_names,
+                  fixed_values=fixed_values,
+                  test_names=test_names,
+                  test_values=test_values,
+                  step1=Step1)
+```
+
+`SA_step2` creates a covariance matrix for each combination of the parameter test values provided. These are then passed to `SA_step3` 
+
+```{r}
+Step3 <- SA_step3(step2=Step2, 
+                  n=138)
+```
+
+
