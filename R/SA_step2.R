@@ -93,7 +93,8 @@ SA_step2 <- function(fixed_names, #covariances fixed to single values
   } else if (!is.null(test_values) & !is.null(test_names)) {
     #combos <- reduce(test_values,crossing)
     combos <- expand.grid(test_values)
-    colnames(combos) <- sapply(test_names,"[[",1)
+    #colnames(combos) <- sapply(test_names,"[[",1) # pick first element of each entry in names list
+    colnames(combos) <- lapply(test_names,paste0,collapse=",") # combines names of params
     combos <- as.data.frame(combos)
     corlist <-
       rep(list((list(
