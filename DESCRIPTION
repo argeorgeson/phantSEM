@@ -15,5 +15,7 @@ RoxygenNote: 7.2.3
 Imports: 
 	corpcor,
 	lavaan (>= 0.6-11)
-
-
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
