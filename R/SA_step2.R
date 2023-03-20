@@ -130,6 +130,10 @@ SA_step2 <- function(fixed_names, #covariances fixed to single values
     covlist[[i]] <- lavaan::cor2cov(R=corlist[[i]][[1]], sd=sqrt(var_phant))
   }
 
-  return(list(mod_phant,var_phant,combos,corlist,covlist))
+  return(list(mod_phant = mod_phant,
+              var_phant=var_phant,
+              combos=combos,
+              correlation_matrix_list = corlist,
+              covariance_matrix_list = covlist))
 
 }
