@@ -34,9 +34,10 @@ The example we use is based on a memory study described by MacKinnon et al., (20
 
 We first define a 3 x 3 cross-sectional covariance matrix 
 ```{r}
-memory_CrossSectional <- matrix(c(1, .638, .258, 
-                                  .638, 1, .271, 
-                                  .258, .271, 1),nrow=3, byrow=T)
+
+memory_CrossSectional <- matrix(c(0.2509804, 0.9511983,  0.4257081,
+                                  0.9511983, 8.8661765,  2.6609477,
+                                  0.4257081, 2.6609477, 10.8592048),nrow=3, byrow=T)
 colnames(memory_CrossSectional) <- c("X","M2","Y2")
 
 ```
@@ -107,7 +108,7 @@ test_names <- list(c("CovM1M2","CovY1Y2"),c("CovY1M2","CovM1Y2"))
 The next argument tells the function a sequence of values to use for the parameters.  The user could provide a vector of values, or a sequence using `seq()`.  
 
 ```{r}
-test_values <- list (seq(0,.6,.1),seq(-.6,.6,.1))
+test_values <- list(seq(0,.6,.1),seq(-.6,.6,.1))
 ```
 
 Now we are ready to use `SA_step2` 
@@ -120,11 +121,64 @@ Step2 <- SA_step2(fixed_names=fixed_names,
                   step1=Step1)
 ```
 
-`SA_step2` creates a covariance matrix for each combination of the parameter test values provided. These are then passed to `SA_step3` 
+`SA_step2` creates a covariance matrix for each combination of the parameter test values provided. The function returns a list of five objects that are then passed to `SA_step3`, they are the lavaan syntax for the phantom variable model ("mod_phant"), a vector of variances ("var_phant"), a data frame of the combinations of phantom covariances ("combos"), a list of correlation matrices ("correlation_matrix_list") and a list of covariance matrices ("covariance_matrix_list"). 
+
+```{r}
+names(Step2)
+```
+
+
+The third function is `SA_step3`, which is where the sensitivity analysis is run.  This function can take a great amount of time depending on how many different phantom parameter combinations the user has entered. For this function, there are only two arguments.  The first is for the output of `SA_step2` and the second is the sample size from the observed data.  
 
 ```{r}
 Step3 <- SA_step3(step2=Step2, 
                   n=138)
+
 ```
 
+The function returns a list of four objects.  The first object is a list of the lavaan output from each model, the second object is the list of covariance matrices used for each model, the third object is a list of correlation matrices, and the fourth object is the data frame of phantom covariance combinations. 
+
+At this point, the sensitivity analysis is complete, but the results are not in the most user-friendly form. The package contains a function to help to organize the results so that they can be examined or plotted.  This function is called `ghost_par_ests` and it is used to pull out parameter estimatesfor a particular parameter (which must be named) from each phantom covariance combination. It has three arguments: step3 is the results from `SA_step3`, parameter_label is the label used in the lavaan code to identify the parameter of interest, and `remove_NA` is a logical object indicating whether the results returned by the function should include rows in which the model did not produce estimates. 
+
+Let's see what the b-estimates would be for our example. The output from this function is a data frame that has the values of the phantom covariances that were varied as well as the lavaan output for the chosen parameter.
+```{r}
+
+b_ests <- ghost_par_ests(step3 = Step3,
+                         parameter_label="b",
+                         remove_NA=TRUE)
+
+a_ests <- ghost_par_ests(step3 = Step3,
+                         parameter_label="a",
+                         remove_NA=TRUE)
+
+b_ests$aest <- a_ests$est
+b_ests$abest <- b_ests$est*b_ests$aest
+
+head(b_ests)
+```
+
+We can then plot the results using `ggplot2` (plotting function to be developed later).
+
+```{r}
+
+library(ggplot2)
+ggplot(b_ests,aes(x=`CovM1M2,CovY1Y2`,y=abest))+geom_point(size=2) +
+  scale_shape_manual() +#scale_fill_manual(values = c("black", "lightgray")) + 
+  scale_color_manual(values = c("grey", "black"))+
+  facet_grid(~b_ests$`CovY1M2,CovM1Y2`)+ theme_bw()+
+  scale_fill_grey()+
+  theme(axis.title.y = element_text(size=18), 
+        axis.text.x = element_text(size=12), 
+        axis.title.x = element_text(size=20),
+        axis.text = element_text(size=15), 
+        strip.text.y = element_text(size=15),
+        strip.text.x = element_text(size=20),
+        legend.text=element_text(size=15),
+        legend.title = element_text(size=18),
+        legend.position="bottom",
+        panel.spacing.x=unit(2,"mm"))
+
+
+
+```
 
