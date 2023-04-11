@@ -1,4 +1,4 @@
-#' Providing parameter estimates from sensitivity analysis function
+#' Provide parameter estimates from sensitivity analysis function
 #'
 #' `ghost_par_ests()` Selects certain parameter estimates from the output of the sensitivity analysis.
 #' @param step3 The object returned from SA_step3.
