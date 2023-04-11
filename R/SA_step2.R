@@ -94,7 +94,12 @@ SA_step2 <- function(fixed_names, #covariances fixed to single values
     #combos <- reduce(test_values,crossing)
     combos <- expand.grid(test_values)
     #colnames(combos) <- sapply(test_names,"[[",1) # pick first element of each entry in names list
+    if (length(test_names)==1){ #if there is one vector of test names then the columns need to correspond to those params
+      colnames(combos) <- unlist(test_names)
+    }
+    else {
     colnames(combos) <- lapply(test_names,paste0,collapse=",") # combines names of params
+    }
     combos <- as.data.frame(combos)
     corlist <-
       rep(list((list(
@@ -102,14 +107,22 @@ SA_step2 <- function(fixed_names, #covariances fixed to single values
       ))), nrow(combos))
 
 
+
     for (i in 1:nrow(combos)){
       tmat=matrix
+      if (length(test_names)==1){
+      tn <- unlist(test_names)
+        for (j in 1:length(tn)){
+          tmat[(which(namemat==tn[j],arr.ind=TRUE))]=combos[i,j]
+        }
+    } else {
       for (j in 1:length(test_names)){
         unlist(test_names)
         for (k in 1:length(test_names[[j]])){
           tmat[(which(namemat==test_names[[j]][k], arr.ind=TRUE))]=combos[i,j]
         }
       }
+    }
       tmat[upper.tri(tmat)]<-t(tmat)[upper.tri(tmat)]
       corlist[[i]][[1]] = tmat
       corlist[[i]][[2]] = corpcor::is.positive.definite(tmat)
