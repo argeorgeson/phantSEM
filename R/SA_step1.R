@@ -72,6 +72,9 @@ namemat <- outer(cov_names, cov_names, function(x, y) {
 
 obsname <- setdiff(unique(parname), namemat[lower.tri(namemat)])
 
+
+cov_map <- data.frame(covname = c(namemat),val=c(matrix),matrix(which(namemat>0,arr.ind=TRUE),ncol=2))
+
 message(paste("Here are the phantom covariance matrix parameters:"))
 print(paste0(sort(unique(parname)),collapse='","'),quote=FALSE)
 message("Choose the names of the phantom covariances that you want to fix to single values and put in a vector. These will be used for the fixed_names argument in the SA_step2 function.  The phantom covariance parameters that you want to vary should be put in a list and used as the test_names argument. ")
@@ -84,7 +87,8 @@ return(list(matrix_template = matrix,
             named_matrix=namemat,
             obs_matrix_phant_names=newmat,
             mod_phant=mod_phant,
-            variances=var_phant))
+            variances=var_phant,
+            cov_map=cov_map))
 }
 
 
