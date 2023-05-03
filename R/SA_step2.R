@@ -1,31 +1,114 @@
 #' Step 2 of sensitivity analysis function
 #'
 #' `SA_step2()` is used to assign values to the phantom covariances. There are three options for assigning values to the phantom covariances: 1. Fix phantom covariance to a numeric value (i.e., 0 or 1), 2. Fix phantom covariance to be equal to another covariance, or 3. Test different values for the phantom covariance.
-#' @param fixed_names this is a vector of the covariance parameter names that will be fixed to a single value
-#' @param fixed_values A vector containing either single values or the names of other known parameters that you will fix each parameter in fixed_names to.
-#' @param test_names A list of vectors containing the names of the covariances that will be varied. If you wish to constrain certain parameters to be equal, you will need to put the names of these parameters in the same vector.
-#' @param test_values A list of seq() to try for each parameter.  If you are constraining certain parameters to be equal, you will put these in a list. See example.
+#' @param phantom_assignment A list of all phantom parameter names (copied from `SA_step1()` output) which assigns them to be equal to ONE of the following: 1) an observed parameter name, 2) a single numeric value, 3) a sequence of values, or 4) another phantom variable that has been set equal to 1-3.
 #' @param step1 The object created in `SA_step1()`
 #' @returns A list containing test covariance matrices that the phantom model will be fit to.
 #' @import corpcor
 #' @import lavaan
 #' @export
-SA_step2 <- function(fixed_names, #covariances fixed to single values
-                     fixed_values, #values that you fix variables to
-                     test_names=NULL, # list of covariances that will be varied. put parameters in same list if you want them to be equal
-                     test_values=NULL, # list of values to try for each parameter
+SA_step2 <- function(phantom_assignment, # list of all phantom parameter names which tells the function what they should be equal to
                      step1 # previous step
 ) {
-  fixed=fixed_names
-  ref=fixed_values
+
+  pa = phantom_assignment
   matrix=step1[[1]]
   parname = step1[[2]]
   namemat = step1[[3]]
   newmat = step1[[4]]
   mod_phant = step1[[5]]
   var_phant = step1[[6]]
+  cov_map = step1[[7]]
 
-  # reference names indices
+  # covariance names fixed to single numeric value
+  fvaltable <- data.frame(matrix(ncol = 2,nrow=0))
+  for (i in seq_along(pa)) {
+    if (is.numeric(pa[[i]]) && length(pa[[i]]) == 1) {
+      fvaltable <- rbind(fvaltable, c(names(pa)[i], pa[[i]]))
+    }
+  }
+  colnames(fvaltable) <- c("name", "value")
+
+
+
+# covariance names set to another named value
+  charvaltable <- unlist(pa[sapply(pa,is.character)])
+  charvaltable <-setNames(charvaltable,NULL)
+
+
+  #this returns the rows that have an observed parameter value
+char_obs <- subset(cov_map,covname %in% charvaltable & !is.na(val))
+ # covariances equal to other values
+eqseq <- subset(cov_map,covname %in% charvaltable & is.na(val))[,1]
+
+# covariances that are going to be varied
+seqvaltable <- lapply(pa, function(x) if (is.numeric(x) & length(x)>1) x )
+seqvaltable <- seqvaltable[!sapply(seqvaltable,is.null)]
+
+
+# covariances that are fixed to observed covariances -- by name
+fnametable <- data.frame(matrix(ncol = 2,nrow=0))
+for (i in seq_along(pa)) {
+  if (is.character(pa[[i]]) && length(pa[[i]]) == 1 && !(pa[[i]] %in% eqseq)) {
+    fnametable <- rbind(fnametable, c(names(pa)[i], pa[[i]]))
+  }
+}
+colnames(fnametable) <- c("name", "value")
+
+# this is the fixed name and values
+fixed <- rbind(fnametable,fvaltable)
+
+# covariances that are fixed to other phantom covariances
+phantomnametable <- data.frame(matrix(ncol = 2,nrow=0))
+for (i in seq_along(pa)) {
+  if (is.character(pa[[i]]) && length(pa[[i]]) == 1 && (pa[[i]] %in% eqseq)) {
+    phantomnametable <- rbind(phantomnametable, c(names(pa)[i], pa[[i]]))
+  }
+}
+colnames(phantomnametable) <- c("name","value")
+
+
+# this creates list of parameter names and values
+testnamelist <- list(NA)
+testnametable <- data.frame(matrix(nrow=0,ncol=1))
+#counter
+j=0
+for (i in seq_along(pa)) {
+  if (is.numeric(pa[[i]]) && length(pa[[i]]) > 1 ) {
+    j=j+1
+    print(j)
+    testnametable <- rbind(testnametable, names(pa)[i])
+    testnamelist[[j]] <- list(name=names(pa)[i],values=pa[[i]])
+  }
+}
+colnames(testnametable) <- c("value")
+
+
+# Create a new list
+new_testnamelist <- list()
+# Loop over the list of lists
+for (i in seq_along(testnamelist)) {
+
+  # Get the name and values of the current list
+  name <- testnamelist[[i]]$name
+  values <- testnamelist[[i]]$values
+
+  # Find the rows in the data frame that matches the value
+  rows <- phantomnametable[phantomnametable$value == name, ]
+
+  # Add the name(s) from the data frame to the current list
+  new_testnamelist[[i]] <- list(name = c(name,rows$name), values = values)
+}
+
+#### assigning names that were previously function arguments ####
+fixed_names=fixed[,1]
+fixed_values=fixed[,2]
+test_names= lapply(new_testnamelist, '[[',1)
+test_values <- lapply(new_testnamelist, '[[',2)
+fixed=fixed_names
+ref=fixed_values
+
+  # reference name indices
   ind_ref <- sapply(fixed_values, function(x) {which(namemat == x,arr.ind=TRUE)})
   vals <- c(rep(0,length(ind_ref)))
 
