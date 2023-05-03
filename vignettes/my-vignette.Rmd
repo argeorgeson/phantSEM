@@ -119,6 +119,21 @@ Step2 <- SA_step2(fixed_names=fixed_names,
                   test_names=test_names,
                   test_values=test_values,
                   step1=Step1)
+
+#phant_assignment <- list("CovM1X"=0,
+#                 "CovY1M1" = "CovY2M2",
+#                 "CovY1X"=0,
+#                 "VarM1M1"=1,
+#                 "VarY1Y1"=1,
+#                 "CovM1M2"=seq(0,.6,.1),
+#                 "CovY1Y2"="CovM1M2",
+#                 "CovY1M2"=seq(-.6,.6,.1),
+#                 "CovM1Y2"="CovY1M2")
+                 
+  
+
+#Step2 <- SA_step2(phantom_assignment = phant_assignment,
+#                  step1=Step1)
 ```
 
 `SA_step2` creates a covariance matrix for each combination of the parameter test values provided. The function returns a list of five objects that are then passed to `SA_step3`, they are the lavaan syntax for the phantom variable model ("mod_phant"), a vector of variances ("var_phant"), a data frame of the combinations of phantom covariances ("combos"), a list of correlation matrices ("correlation_matrix_list") and a list of covariance matrices ("covariance_matrix_list"). 
