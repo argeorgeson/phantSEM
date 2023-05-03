@@ -15,6 +15,16 @@ ghost_par_ests <- function(step3,
   combos <- step3[[4]]
   parmatrix <- matrix(NA, nrow = 0, ncol = 10)
   comboindex <- matrix(NA, nrow = 0, ncol = 1)
+  colnames(parmatrix) <-  c("lhs",
+                            "op",
+                            "rhs",
+                            "label",
+                            "est",
+                            "se",
+                            "z",
+                            "pvalue",
+                            "ci.lower",
+                            "ci.upper")
 
   for (i in 1:nrow(combos)) {
     reptemp = i
@@ -42,7 +52,7 @@ ghost_par_ests <- function(step3,
       "pvalue",
       "ci.lower",
       "ci.upper")
-  out <- cbind(combos, out)
+  #out <- cbind(combos, out)
 
   if (remove_NA == TRUE) {
     out <- na.omit(out)
