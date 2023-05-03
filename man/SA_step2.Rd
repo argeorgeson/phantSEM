@@ -4,22 +4,10 @@
 \alias{SA_step2}
 \title{Step 2 of sensitivity analysis function}
 \usage{
-SA_step2(
-  fixed_names,
-  fixed_values,
-  test_names = NULL,
-  test_values = NULL,
-  step1
-)
+SA_step2(phantom_assignment, step1)
 }
 \arguments{
-\item{fixed_names}{this is a vector of the covariance parameter names that will be fixed to a single value}
-
-\item{fixed_values}{A vector containing either single values or the names of other known parameters that you will fix each parameter in fixed_names to.}
-
-\item{test_names}{A list of vectors containing the names of the covariances that will be varied. If you wish to constrain certain parameters to be equal, you will need to put the names of these parameters in the same vector.}
-
-\item{test_values}{A list of seq() to try for each parameter.  If you are constraining certain parameters to be equal, you will put these in a list. See example.}
+\item{phantom_assignment}{A list of all phantom parameter names (copied from \code{SA_step1()} output) which assigns them to be equal to ONE of the following: 1) an observed parameter name, 2) a single numeric value, 3) a sequence of values, or 4) another phantom variable that has been set equal to 1-3.}
 
 \item{step1}{The object created in \code{SA_step1()}}
 }
