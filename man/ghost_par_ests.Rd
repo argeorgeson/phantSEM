@@ -2,7 +2,7 @@
 % Please edit documentation in R/ghost_par_ests.R
 \name{ghost_par_ests}
 \alias{ghost_par_ests}
-\title{Providing parameter estimates from sensitivity analysis function}
+\title{Provide parameter estimates from sensitivity analysis function}
 \usage{
 ghost_par_ests(step3, parameter_label, remove_NA = FALSE)
 }
