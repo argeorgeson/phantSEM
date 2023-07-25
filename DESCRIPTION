@@ -18,7 +18,9 @@ Imports:
 	lavaan (>= 0.6-11)
 Suggests: 
     knitr,
-    rmarkdown
-VignetteBuilder: knitr
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: rmarkdown
 Depends: 
     R (>= 2.10)
+Config/testthat/edition: 3
