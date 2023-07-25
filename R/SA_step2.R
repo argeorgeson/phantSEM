@@ -12,7 +12,7 @@ SA_step2 <- function(phantom_assignment, # list of all phantom parameter names w
 ) {
 
   pa = phantom_assignment
-  matrix=step1[[1]]
+  matrix_template=step1[[1]]
   parname = step1[[2]]
   namemat = step1[[3]]
   newmat = step1[[4]]
@@ -120,19 +120,19 @@ ref=fixed_values
     {print(is.na(ind_ref[[i]][2]))
       vals[i]<-as.numeric(fixed_values[i])
       print(vals[i])}
-    else {vals[i] <-(matrix[ind_ref[[i]]]) }
+    else {vals[i] <-(matrix_template[ind_ref[[i]]]) }
   }
 
   # put reference values into covariance matrix
   for (i in 1:length(fixed)){
     index = which(newmat==fixed[i],arr.ind=TRUE)[1,]
-    matrix[index[[1]],index[[2]]] = as.numeric(vals[i])
-    matrix[index[[2]],index[[1]]] = as.numeric(vals[i])
+    matrix_template[index[[1]],index[[2]]] = as.numeric(vals[i])
+    matrix_template[index[[2]],index[[1]]] = as.numeric(vals[i])
     # matrix <- sub(fixed[i],as.numeric(vals[i]),newmat)
   }
 
   # variables that are NA
-  naind <- which((is.na(matrix)&lower.tri(matrix)),arr.ind=TRUE)
+  naind <- which((is.na(matrix_template)&lower.tri(matrix_template)),arr.ind=TRUE)
 
   #names of remaining parameters that don't have values
   name_na <- namemat[naind]
@@ -144,7 +144,7 @@ ref=fixed_values
   }
 
 
-  matrix[which((is.na(matrix)&lower.tri(matrix)))]
+  matrix_template[which((is.na(matrix_template)&lower.tri(matrix_template)))]
 
   # if no variables with custom ranges are entered
   if (is.null(test_values) & is.null(test_names)) {
@@ -161,7 +161,7 @@ ref=fixed_values
       ))), nrow(combos))
 
     for (i in 1:nrow(combos)){
-      tmat <- matrix
+      tmat <- matrix_template
       tmat[naind]=unlist(combos[i,])
       tmat[upper.tri(tmat)]<-t(tmat)[upper.tri(tmat)]
       corlist[[i]][[1]] = tmat
@@ -192,7 +192,7 @@ ref=fixed_values
 
 
     for (i in 1:nrow(combos)){
-      tmat=matrix
+      tmat=matrix_template
       if (length(test_names)==1){
       tn <- unlist(test_names)
         for (j in 1:length(tn)){
