@@ -15,7 +15,6 @@ SA_step1 <- function(lavoutput, #lavaan object
                      ){
 
 fit = lavoutput
-
 C <- fit@SampleStats@cov[[1]]
 colnames(C) <- fit@Data@ov.names[[1]]
 var_obs <- diag(C)
@@ -23,24 +22,29 @@ var_obs <- diag(C)
 obsvar<- unique(c(lavaan::lavParseModelString(mod_obs)$lhs,lavaan::lavParseModelString(mod_obs)$rhs))
 SAvar <- unique(c(lavaan::lavParseModelString(mod_phant)$lhs,lavaan::lavParseModelString(mod_phant)$rhs))
 
+#check for nested
+stopifnot("Your phantom model must include all variables in your observed model" =
+            obsvar %in% SAvar)
 
 # find the variables that are new in the phantom model -- those are the phantom vars
 phantom_names <- setdiff(SAvar,obsvar)
 
+#create expanded matrix
 newmat <- matrix(NA,nrow=length(SAvar),ncol=length(SAvar))
 newmat[1:length(obsvar),1:length(obsvar)]= stats::cov2cor(C)
 
 #newnames <- c(fit@Data@ov.names[[1]],phantom_names)
 #simpnames <- gsub(mediator,"M",oldnames[[2]])
 
+#add var names to expanded matrix
 colnames(newmat)=c(fit@Data@ov.names[[1]],phantom_names)
 rownames(newmat)=colnames(newmat)
-
+# put variance of phantom variables along diagonal
 var_phant <- c(var_obs,c(rep(1,length(phantom_names))))
 
-matrix = newmat
+matrix_template = newmat
 
-# put cov names into the matrix
+# put names of phantom variances/covariances into expanded matrix
 parname <- c()
 for (i in 1:nrow(newmat)) {
   for (j in 1:ncol(newmat)){
@@ -73,16 +77,19 @@ namemat <- outer(cov_names, cov_names, function(x, y) {
 obsname <- setdiff(unique(parname), namemat[lower.tri(namemat)])
 
 
-cov_map <- data.frame(covname = c(namemat),val=c(matrix),matrix(which(namemat>0,arr.ind=TRUE),ncol=2))
+cov_map <- data.frame(covname = c(namemat),val=c(matrix_template),matrix(which(namemat>0,arr.ind=TRUE),ncol=2))
 
-message(paste("Here are the phantom covariance matrix parameters:"))
-print(paste0(sort(unique(parname)),collapse='","'),quote=FALSE)
-message("Choose the names of the phantom covariances that you want to fix to single values and put in a vector. These will be used for the fixed_names argument in the SA_step2 function.  The phantom covariance parameters that you want to vary should be put in a list and used as the test_names argument. ")
+message(paste("Here are the phantom covariance matrix parameters (copy and paste and add values/names for step2):\n
+              "))
+q <- paste0('"',sort(unique(parname)),'"',collapse='= ,\n')
+cat("phantom_assignment <-(",q,"= )")
+#print(paste0(sort(unique(parname)),collapse='","'),quote=FALSE) #old
+message("\n Choose the names of the phantom covariances that you want to fix to single values and put in a vector. These will be used for the fixed_names argument in the SA_step2 function.  The phantom covariance parameters that you want to vary should be put in a list and used as the test_names argument. ")
 message("Here are the observed covariance matrix parameters:")
 #print(sort(namemat[lower.tri(namemat)]))
 print(sort(setdiff(namemat[lower.tri(namemat)],unique(parname))))
 message("Choose which values you want to use for your fixed parameters and put their names in a vector (fixed_values). Make sure the order is the same for both vectors.")
-return(list(matrix_template = matrix,
+return(list(matrix_template = matrix_template,
             Phantom_covs=parname,
             named_matrix=namemat,
             obs_matrix_phant_names=newmat,
