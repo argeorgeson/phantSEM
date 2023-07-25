@@ -6,6 +6,7 @@ description:
 vignette: >
   %\VignetteIndexEntry{my-vignette}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{rmarkdown::render}
   %\VignetteEncoding{UTF-8}
 ---
 
@@ -28,6 +29,8 @@ The example that we will use to illustrate the use of `ghostR` is one in which w
 devtools::install_github("argeorgeson/ghostR")
 library(ghostR)
 library(lavaan)
+library(tidyr)
+library(tidyverse)
 
 ```
 The example we use is based on a memory study described by MacKinnon et al., (2018). Participants in the study were given a list of words and were randomly assigned to either make mental images of the words, or repeat the words.  The individuals were then asked to recall as many words from the list as they could.  Therefore, the predictor X was the condition (1=imagery, 0=repetition), the mediator M was the extent to which they used mental imagery and the outcome Y was the number of words they recalled. 
@@ -39,6 +42,7 @@ memory_CrossSectional <- matrix(c(0.2509804, 0.9511983,  0.4257081,
                                   0.9511983, 8.8661765,  2.6609477,
                                   0.4257081, 2.6609477, 10.8592048),nrow=3, byrow=T)
 colnames(memory_CrossSectional) <- c("X","M2","Y2")
+
 
 ```
 
@@ -201,4 +205,34 @@ ggplot(b_ests,aes(x=`CovM1M2,CovY1Y2`,y=est))+geom_point(size=2) +
 
 
 ```
+Another option is to use the lookup table that is part of the package.  The function `SA_lookup` can be used to do this. Note that for this version, the SA_lookup function only provides standardized estimates as it uses the correlation matrix only.  
+```{r}
 
+cov2cor(memory_CrossSectional)
+lookup_results <- SA_lookup(CorXM=.64, CorXY=.26, CorMY=.27)
+
+```
+
+```{r}
+
+lookup_results_plot <- lookup_results %>% filter(round(corr,1)==.3 & (stabr >-.1 & stabr < .7))
+
+ggplot(lookup_results_plot,aes(x=stabr,y=est_ab))+geom_point(size=2) +
+  scale_shape_manual() +#scale_fill_manual(values = c("black", "lightgray")) + 
+  scale_color_manual(values = c("grey", "black"))+
+  facet_grid(~lookup_results_plot$clr)+ theme_bw()+
+  scale_fill_grey()+
+  theme(axis.title.y = element_text(size=18), 
+        axis.text.x = element_text(size=12), 
+        axis.title.x = element_text(size=20),
+        axis.text = element_text(size=15), 
+        strip.text.y = element_text(size=15),
+        strip.text.x = element_text(size=20),
+        legend.text=element_text(size=15),
+        legend.title = element_text(size=18),
+        legend.position="bottom",
+        panel.spacing.x=unit(2,"mm"))
+
+```
+
+Comparing this result to the earlier result, the pattern of the results is similar, but the scale of the y-axis is different. This is because these results are standardized. 
