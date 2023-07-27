@@ -49,7 +49,7 @@ parname <- c()
 for (i in 1:nrow(newmat)) {
   for (j in 1:ncol(newmat)){
     if (is.na(newmat[i,j]) & i==j) {
-      tn <-(paste0("Var",rownames(newmat)[i],colnames(newmat)[j]))
+      tn <-(paste0("Var",rownames(newmat)[i]))
       newmat[i,j]=tn
       parname <- c(parname,tn)
     }
@@ -77,7 +77,9 @@ namemat <- outer(cov_names, cov_names, function(x, y) {
 obsname <- setdiff(unique(parname), namemat[lower.tri(namemat)])
 
 
-cov_map <- data.frame(covname = c(namemat),val=c(matrix_template),matrix(which(namemat>0,arr.ind=TRUE),ncol=2))
+cov_map <- data.frame(covname = c(namemat),
+                      val=c(matrix_template),
+                      matrix(which(namemat>0,arr.ind=TRUE),ncol=2))
 
 message(paste("Here are the phantom covariance matrix parameters (copy and paste and add values/names for step2):\n
               "))
