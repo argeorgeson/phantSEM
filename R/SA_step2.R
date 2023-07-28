@@ -88,17 +88,22 @@ colnames(testnametable) <- c("value")
 
 # make sure the phantom variable name is correct
 for (i in 1:nrow(phantomnametable)) {
-  phantomnametable[i,2] %in% testnametable
+  print(phantomnametable[i,2] %in% testnametable[,1])
 }
 
 #make sure that when there are phantom variables equal to other phantom variables, the phantom variable name is correct
 stopifnot("The phantom variable name that another phantom variable was set equal to is not spelled correctly. Please compare to output from SA_step1" =
-         all(phantomnametable[,2] %in% testnametable))
+         all(phantomnametable[,2] %in% testnametable[,1]))
 
 
 # if all phantom variables are fixed to numeric values
 if(length(unique(parname))==nrow(fvaltable)) {
 
+  #### assigning names that were previously function arguments ####
+  fixed_names=fixed[,1]
+  fixed_values=fixed[,2]
+  fixed=fixed_names
+  ref=fixed_values
 
 } else {
 
@@ -117,8 +122,6 @@ for (i in seq_along(testnamelist)) {
   # Add the name(s) from the data frame to the current list
   new_testnamelist[[i]] <- list(name = c(name,rows$name), values = values)
 }
-
-}
 #### assigning names that were previously function arguments ####
 fixed_names=fixed[,1]
 fixed_values=fixed[,2]
@@ -126,6 +129,8 @@ test_names= lapply(new_testnamelist, '[[',1)
 test_values <- lapply(new_testnamelist, '[[',2)
 fixed=fixed_names
 ref=fixed_values
+}
+
 
   # reference name indices
   ind_ref <- sapply(fixed_values, function(x) {which(namemat == x,arr.ind=TRUE)})
