@@ -5,6 +5,8 @@
 #' @param step1 The object created in `SA_step1()`
 #' @returns A list containing test covariance matrices that the phantom model will be fit to.
 #' @import corpcor
+#' @import tidyr
+#' @import dplyr
 #' @import lavaan
 #' @export
 SA_step2 <- function(phantom_assignment, # list of all phantom parameter names which tells the function what they should be equal to
@@ -19,6 +21,8 @@ SA_step2 <- function(phantom_assignment, # list of all phantom parameter names w
   mod_phant = step1[[5]]
   var_phant = step1[[6]]
   cov_map = step1[[7]]
+
+
 
   # covariance names fixed to single numeric value
   fvaltable <- data.frame(matrix(ncol = 2,nrow=0))
@@ -68,9 +72,7 @@ for (i in seq_along(pa)) {
 colnames(phantomnametable) <- c("name","value")
 
 
-
-
-# this creates list of parameter names and values
+# this creates list of parameter names and values that will be varied
 testnamelist <- list(NA)
 testnametable <- data.frame(matrix(nrow=0,ncol=1))
 #counter
@@ -85,6 +87,20 @@ for (i in seq_along(pa)) {
 }
 colnames(testnametable) <- c("value")
 
+# find remaining phantom parameters that will be set to default test values
+defaultname <- setdiff(unique(parname),names(pa))
+
+defaultnamelist <- list(NA)
+defaultnametable <- data.frame(matrix(nrow=0,ncol=1))
+#counter
+j=j
+for (i in length(defaultname)) {
+    j=j+1
+    print(j)
+    testnametable <- rbind(testnametable, defaultname[i])
+    testnamelist[[j]] <- list(name=defaultname[i],values=seq(-.3,.3,.1))
+}
+
 
 # make sure the phantom variable name is correct
 for (i in 1:nrow(phantomnametable)) {
@@ -96,8 +112,10 @@ stopifnot("The phantom variable name that another phantom variable was set equal
          all(phantomnametable[,2] %in% testnametable[,1]))
 
 
-# if all phantom variables are fixed to numeric values
-if(length(unique(parname))==nrow(fvaltable)) {
+## Unique Use Cases
+#Case 1 -- all phantom variables are fixed to numeric values OR
+#Case 2 -- all Phantom Variables fixed to observed variables
+if(length(unique(parname))==nrow(fvaltable) | length(unique(parname))==nrow(fnametable)) {
 
   #### assigning names that were previously function arguments ####
   fixed_names=fixed[,1]
@@ -105,8 +123,23 @@ if(length(unique(parname))==nrow(fvaltable)) {
   fixed=fixed_names
   ref=fixed_values
 
-} else {
 
+    corlist<-
+      rep(list((list(
+        matrix(NA, nrow = nrow(newmat), ncol = ncol(newmat)), c(NA)
+      ))), 1)
+
+    corlist[[1]] <- matrix_template
+
+    covlist <-
+      rep(list((list(
+        matrix(NA, nrow = nrow(newmat), ncol = ncol(newmat)), c(NA)
+      ))), 1)
+
+    covlist[[1]] <- lavaan::cor2cov(R=corlist[[1]], sd=sqrt(var_phant))
+
+
+} else {
 # Create a new list
 new_testnamelist <- list()
 # Loop over the list of lists
@@ -129,7 +162,7 @@ test_names= lapply(new_testnamelist, '[[',1)
 test_values <- lapply(new_testnamelist, '[[',2)
 fixed=fixed_names
 ref=fixed_values
-}
+
 
 
   # reference name indices
@@ -161,32 +194,25 @@ ref=fixed_values
   #names of remaining parameters that don't have values
   name_na <- namemat[naind]
 
+  namemat[naind] %in% fixed_names
+
   # check if there are any remaining NA values
+  phant_default <- matrix(NA,nrow=0,ncol=1)
   for (j in 1:nrow(naind)){
-    print(name_na[j] %in% unlist(test_names))
+    if(name_na[j] %in% unlist(test_names)){
+
+    } else {
+      print(name_na[j])
+      phant_default <- rbind(phant_default,name_na[j])
+    }
+   # print(name_na[j] %in% unlist(test_names))
   }
 
-  # if fixed values are given for all of the phantom variables
-  if(length(unique(parname))==nrow(fvaltable)) {
 
-    corlist<-
-      rep(list((list(
-        matrix(NA, nrow = nrow(newmat), ncol = ncol(newmat)), c(NA)
-      ))), 1)
 
-    corlist[[1]] <- matrix_template
-
-    covlist <-
-      rep(list((list(
-        matrix(NA, nrow = nrow(newmat), ncol = ncol(newmat)), c(NA)
-      ))), 1)
-
-      covlist[[1]] <- lavaan::cor2cov(R=corlist[[1]], sd=sqrt(var_phant))
-
-  } else {
 
   # if no variables with custom ranges are included on the list -- default is to use range -.3 to .3
- if (length(naind)>0){
+ if (length(naind)>0 & length(name_na)>0){
   # if (is.null(test_values) & is.null(test_names)) {
     saparname <- newmat[naind]
     combocols <- nrow(naind)
@@ -269,7 +295,8 @@ ref=fixed_values
   for (i in 1:nrow(combos)){
     covlist[[i]] <- lavaan::cor2cov(R=corlist[[i]][[1]], sd=sqrt(var_phant))
   }
-  }
+}
+
 
   return(list(mod_phant = mod_phant,
               var_phant=var_phant,
