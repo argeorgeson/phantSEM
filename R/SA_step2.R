@@ -138,6 +138,8 @@ if(length(unique(parname))==nrow(fvaltable) | length(unique(parname))==nrow(fnam
 
     covlist[[1]] <- lavaan::cor2cov(R=corlist[[1]], sd=sqrt(var_phant))
 
+    combos <- list(NA)
+
 
 } else {
 # Create a new list
@@ -209,38 +211,6 @@ ref=fixed_values
   }
 
 
-
-
-  # if no variables with custom ranges are included on the list -- default is to use range -.3 to .3
- if (length(naind)>0 & length(name_na)>0){
-  # if (is.null(test_values) & is.null(test_names)) {
-    saparname <- newmat[naind]
-    combocols <- nrow(naind)
-    range <- seq(-.3,.3,.1)
-    combos <- eval(parse(text= paste("crossing(",paste(rep("range",combocols),collapse=","),")")))
-    colnames(combos) <- saparname
-    combos <- as.data.frame(combos)
-
-    corlist <-
-      rep(list((list(
-        matrix(NA, nrow = nrow(newmat), ncol = ncol(newmat)), c(NA)
-      ))), nrow(combos))
-
-    for (i in 1:nrow(combos)){
-      tmat <- matrix_template
-      tmat[naind]=unlist(combos[i,])
-      tmat[upper.tri(tmat)]<-t(tmat)[upper.tri(tmat)]
-      corlist[[i]][[1]] = tmat
-      corlist[[i]][[2]] = corpcor::is.positive.definite(tmat)
-    }
-
-    covlist <-
-      rep(list((list(
-        matrix(NA, nrow = nrow(newmat), ncol = ncol(newmat)), c(NA)
-      ))), nrow(combos))
-
-    # if there are test values given
-  } else if (length(test_values)>0 & length(test_names)>0) {
     #combos <- reduce(test_values,crossing)
     combos <- expand.grid(test_values)
 
@@ -281,8 +251,8 @@ ref=fixed_values
       corlist[[i]][[2]] = corpcor::is.positive.definite(tmat)
     }
 
-  } else if (!is.null(test_values) & is.null(test_names)) { message("Error: You must provide lists for BOTH (test_values) and (test_names), or leave these null.  You have provided testvalues but have not specified parameters in test_names. ")
-  } else if (is.null(test_values) & !is.null(test_names)) {message("Error: You must provide lists for BOTH (test_values) and (test_names), or leave these null. You have provided parameter names (test_names) but have not specified the values you want to test (test_values).")}
+  #} else if (!is.null(test_values) & is.null(test_names)) { message("Error: You must provide lists for BOTH (test_values) and (test_names), or leave these null.  You have provided testvalues but have not specified parameters in test_names. ")
+  #} else if (is.null(test_values) & !is.null(test_names)) {message("Error: You must provide lists for BOTH (test_values) and (test_names), or leave these null. You have provided parameter names (test_names) but have not specified the values you want to test (test_values).")}
 
 
 
