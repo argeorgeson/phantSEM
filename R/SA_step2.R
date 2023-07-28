@@ -68,6 +68,8 @@ for (i in seq_along(pa)) {
 colnames(phantomnametable) <- c("name","value")
 
 
+
+
 # this creates list of parameter names and values
 testnamelist <- list(NA)
 testnametable <- data.frame(matrix(nrow=0,ncol=1))
@@ -83,6 +85,22 @@ for (i in seq_along(pa)) {
 }
 colnames(testnametable) <- c("value")
 
+
+# make sure the phantom variable name is correct
+for (i in 1:nrow(phantomnametable)) {
+  phantomnametable[i,2] %in% testnametable
+}
+
+#make sure that when there are phantom variables equal to other phantom variables, the phantom variable name is correct
+stopifnot("The phantom variable name that another phantom variable was set equal to is not spelled correctly. Please compare to output from SA_step1" =
+         all(phantomnametable[,2] %in% testnametable))
+
+
+# if all phantom variables are fixed to numeric values
+if(length(unique(parname))==nrow(fvaltable)) {
+
+
+} else {
 
 # Create a new list
 new_testnamelist <- list()
@@ -100,6 +118,7 @@ for (i in seq_along(testnamelist)) {
   new_testnamelist[[i]] <- list(name = c(name,rows$name), values = values)
 }
 
+}
 #### assigning names that were previously function arguments ####
 fixed_names=fixed[,1]
 fixed_values=fixed[,2]
@@ -138,16 +157,32 @@ ref=fixed_values
   name_na <- namemat[naind]
 
   # check if there are any remaining NA values
-
   for (j in 1:nrow(naind)){
     print(name_na[j] %in% unlist(test_names))
   }
 
+  # if fixed values are given for all of the phantom variables
+  if(length(unique(parname))==nrow(fvaltable)) {
 
-  matrix_template[which((is.na(matrix_template)&lower.tri(matrix_template)))]
+    corlist<-
+      rep(list((list(
+        matrix(NA, nrow = nrow(newmat), ncol = ncol(newmat)), c(NA)
+      ))), 1)
+
+    corlist[[1]] <- matrix_template
+
+    covlist <-
+      rep(list((list(
+        matrix(NA, nrow = nrow(newmat), ncol = ncol(newmat)), c(NA)
+      ))), 1)
+
+      covlist[[1]] <- lavaan::cor2cov(R=corlist[[1]], sd=sqrt(var_phant))
+
+  } else {
 
   # if no variables with custom ranges are included on the list -- default is to use range -.3 to .3
-  if (is.null(test_values) & is.null(test_names)) {
+ if (length(naind)>0){
+  # if (is.null(test_values) & is.null(test_names)) {
     saparname <- newmat[naind]
     combocols <- nrow(naind)
     range <- seq(-.3,.3,.1)
@@ -174,7 +209,7 @@ ref=fixed_values
       ))), nrow(combos))
 
     # if there are test values given
-  } else if (!is.null(test_values) & !is.null(test_names)) {
+  } else if (length(test_values)>0 & length(test_names)>0) {
     #combos <- reduce(test_values,crossing)
     combos <- expand.grid(test_values)
 
@@ -228,6 +263,7 @@ ref=fixed_values
 
   for (i in 1:nrow(combos)){
     covlist[[i]] <- lavaan::cor2cov(R=corlist[[i]][[1]], sd=sqrt(var_phant))
+  }
   }
 
   return(list(mod_phant = mod_phant,
