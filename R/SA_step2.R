@@ -146,7 +146,7 @@ ref=fixed_values
 
   matrix_template[which((is.na(matrix_template)&lower.tri(matrix_template)))]
 
-  # if no variables with custom ranges are entered
+  # if no variables with custom ranges are included on the list -- default is to use range -.3 to .3
   if (is.null(test_values) & is.null(test_names)) {
     saparname <- newmat[naind]
     combocols <- nrow(naind)
@@ -173,16 +173,20 @@ ref=fixed_values
         matrix(NA, nrow = nrow(newmat), ncol = ncol(newmat)), c(NA)
       ))), nrow(combos))
 
+    # if there are test values given
   } else if (!is.null(test_values) & !is.null(test_names)) {
     #combos <- reduce(test_values,crossing)
     combos <- expand.grid(test_values)
-    #colnames(combos) <- sapply(test_names,"[[",1) # pick first element of each entry in names list
-    if (length(test_names)==1){ #if there is one vector of test names then the columns need to correspond to those params
-      colnames(combos) <- unlist(test_names)
-    }
-    else {
+
+    ## this code is causing issues
+    #if (length(test_names)==1){ #if there is one vector of test names then the columns need to correspond to those params
+    #  colnames(combos) <- unlist(test_names)
+    #}
+    ##
+
+    #else { #this code is causing issues
     colnames(combos) <- lapply(test_names,paste0,collapse=",") # combines names of params
-    }
+    #} #this code is causing issues
     combos <- as.data.frame(combos)
     corlist <-
       rep(list((list(
@@ -196,7 +200,7 @@ ref=fixed_values
       if (length(test_names)==1){
       tn <- unlist(test_names)
         for (j in 1:length(tn)){
-          tmat[(which(namemat==tn[j],arr.ind=TRUE))]=combos[i,j]
+          tmat[(which(namemat==tn[j],arr.ind=TRUE))]=combos[i,] #combos would only be a vector here so do not index column
         }
     } else {
       for (j in 1:length(test_names)){
