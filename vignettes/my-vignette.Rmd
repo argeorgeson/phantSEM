@@ -1,5 +1,5 @@
 ---
-title: "ghostR"
+title: "phantSEM"
 output: rmarkdown::html_vignette
 description: 
   Learn how to use the functions `SA_step1` `SA_step2` and `SA_step3` to conduct a sensitivity   analysis using phantom variables.  
@@ -19,15 +19,15 @@ knitr::opts_chunk$set(
 
 ## Introduction 
 
-This vignette describes the use of the functions `SA_step1` `SA_step2` and `SA_step3`. The goal of these functions are to conduct a sensitivity analysis with phantom variables.  Phantom variables are variables that you did  not observe, but that you can specify in a structural equation model by specifying the variance and covariances of the phantom variable with other variables. Creating a single phantom variable is fairly straightforward in the R package `lavaan`. There are scenarios where a researcher may wish to see how the results from an analysis might differ if they had observed additional variables. For instance, a researcher may want to assess whether a certain regression coefficient would be statistically significant if they had controlled for another variable in their analysis. Because the researcher does not know how this phantom variable covaries with the variables they did observe, it would be useful to try different values for the covariances in a sensitivity analysis.  The `ghostR` package is built for researchers to test different values for the covariances between their phantom variables and observed variables. 
+This vignette describes the use of the functions `SA_step1` `SA_step2` and `SA_step3`. The goal of these functions are to conduct a sensitivity analysis with phantom variables.  Phantom variables are variables that you did  not observe, but that you can specify in a structural equation model by specifying the variance and covariances of the phantom variable with other variables. Creating a single phantom variable is fairly straightforward in the R package `lavaan`. There are scenarios where a researcher may wish to see how the results from an analysis might differ if they had observed additional variables. For instance, a researcher may want to assess whether a certain regression coefficient would be statistically significant if they had controlled for another variable in their analysis. Because the researcher does not know how this phantom variable covaries with the variables they did observe, it would be useful to try different values for the covariances in a sensitivity analysis.  The `phantSEM` package is built for researchers to test different values for the covariances between their phantom variables and observed variables. 
 
-In this vignette, a full example is illustrated using the functions of `ghostR`.
+In this vignette, a full example is illustrated using the functions of `phantSEM`.
 
 ## Cross-sectional Mediation 
-The example that we will use to illustrate the use of `ghostR` is one in which we have fit a cross-sectional mediation model and would like to see if our estimates of the mediated effect would hold if we had collected an additional wave of data.  To start, we will load the packages we need. 
+The example that we will use to illustrate the use of `phantSEM` is one in which we have fit a cross-sectional mediation model and would like to see if our estimates of the mediated effect would hold if we had collected an additional wave of data.  To start, we will load the packages we need. 
 ```{r setup, message=FALSE, results="hide"}
-devtools::install_github("argeorgeson/ghostR")
-library(ghostR)
+devtools::install_github("argeorgeson/phantSEM")
+library(phantSEM)
 library(lavaan)
 library(tidyr)
 library(tidyverse)
