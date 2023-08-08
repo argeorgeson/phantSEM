@@ -19,6 +19,17 @@ SA_step3 <- function(step2,n){
 
  # naind <- which((is.na(matrix)&lower.tri(matrix)),arr.ind=TRUE)
 
+#  sumlist <- list(NA)
+#  for (i in 1:nrow(combos)){
+#  tryCatch({
+#    # code that might throw an error
+#    sumlist[[i]]=lavaan::parameterEstimates(lavaan::sem(model=mod_phant,sample.cov = covlist[[i]],sample.nobs = n))
+#  }, error = function(e) {
+#    # handle the error (in this case, just print a message and continue)
+#    message(sprintf("Error in iteration %d: %s", i, e$message))
+#  })
+#}
+
 
 
   sumlist <- list(NA)

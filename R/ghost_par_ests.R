@@ -52,7 +52,7 @@ ghost_par_ests <- function(step3,
       "pvalue",
       "ci.lower",
       "ci.upper")
-  #out <- cbind(combos, out)
+  out <- cbind(combos, out)
 
   if (remove_NA == TRUE) {
     out <- na.omit(out)
