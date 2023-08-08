@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(ghostR)
+library(phantSEM)
 
-test_check("ghostR")
+test_check("phantSEM")
