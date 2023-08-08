@@ -1,5 +1,5 @@
-Package: phantSEM
-Title: An R Package for using Phantom Variables in Structual Equation Models to conduct sensitivity analyses.
+Package: ghostR
+Title: An R Package for Sensitivity Analyses with Phantom Variables
 Version: 0.0.0.9000
 Authors@R: 
     person("Alexis", "Georgeson", , "georgeson.alexis@gmail.com", role = c("aut", "cre"),
