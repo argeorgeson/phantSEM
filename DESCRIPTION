@@ -21,7 +21,11 @@ VignetteBuilder:
 Suggests: 
     knitr,
     rmarkdown,
+<<<<<<< HEAD
     testthat (>= 3.0.0),
+=======
+    testthat (>= 3.0.0)
+>>>>>>> ee492e354db77fc19bb882bb1777496cf2730729
     cli (>= 3.6.1)
 Depends: 
     R (>= 2.10)
