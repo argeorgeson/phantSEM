@@ -22,7 +22,8 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    cli (>= 3.6.1)
+    cli (>= 3.6.1), 
+    ggplot2
 Depends: 
     R (>= 2.10)
 Config/testthat/edition: 3
