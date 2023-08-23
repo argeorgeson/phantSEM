@@ -7,8 +7,6 @@ Authors@R:
 Description: This package allows you to create phantom variables to assess 
     temporal bias or confounding bias in SEM models that do not have a mean 
     structure.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
@@ -21,7 +19,8 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
-VignetteBuilder: rmarkdown
+VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
 Config/testthat/edition: 3
+License: MIT + file LICENSE
