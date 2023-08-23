@@ -4,7 +4,7 @@ output: rmarkdown::html_vignette
 description: 
   Learn how to use the functions `SA_step1` `SA_step2` and `SA_step3` to conduct a sensitivity   analysis using phantom variables.  
 vignette: >
-  %\VignetteIndexEntry{my-vignette}
+  %\VignetteIndexEntry{phantSEM}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
