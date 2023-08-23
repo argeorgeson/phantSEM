@@ -6,6 +6,7 @@ description:
 vignette: >
   %\VignetteIndexEntry{phantSEM}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{rmarkdown::render}
   %\VignetteEncoding{UTF-8}
 ---
 
