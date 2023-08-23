@@ -2,7 +2,7 @@
 #'
 #' `SA_step2()` is used to assign values to the phantom covariances. There are three options for assigning values to the phantom covariances: 1. Fix phantom covariance to a numeric value (i.e., 0 or 1), 2. Fix phantom covariance to be equal to another covariance, or 3. Test different values for the phantom covariance.
 #' @param phantom_assignment A list of all phantom parameter names (copied from `SA_step1()` output) which assigns them to be equal to ONE of the following: 1) an observed parameter name, 2) a single numeric value, 3) a sequence of values, or 4) another phantom variable that has been set equal to 1-3.
-#' @param step1 The object created in `SA_step1()`
+#' @param step1 The output object created in `SA_step1()`
 #' @returns A list containing test covariance matrices that the phantom model will be fit to.
 #' @import corpcor
 #' @import tidyr
