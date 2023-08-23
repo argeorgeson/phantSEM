@@ -16,7 +16,8 @@ Imports:
 	corpcor(>= 1.6.10),
 	lavaan(>= 0.6-11)
 VignetteBuilder: 
-    knitr
+    knitr, 
+    rmarkdown
 Suggests: 
     knitr,
     rmarkdown,
