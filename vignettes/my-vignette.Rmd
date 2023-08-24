@@ -183,7 +183,7 @@ head(b_ests)
 
 We can then plot the results using `ggplot2` (plotting function to be developed later).
 
-```{r, fig.width=10,fig.height=5}
+```{r, fig.width=10,fig.height=5,eval=FALSE}
 
 library(ggplot2)
 ggplot(b_ests,aes(x=`CovM1M2,CovY1Y2`,y=est))+geom_point(size=2) +
@@ -213,7 +213,7 @@ lookup_results <- SA_lookup(CorXM=.64, CorXY=.26, CorMY=.27)
 
 ```
 
-```{r,fig.width=9,fig.height=5}
+```{r,fig.width=9,fig.height=5,eval=FALSE}
 
 lookup_results_plot <- lookup_results %>% filter(round(corr,1)==.3 & (stabr >-.1 & stabr < .7))
 
