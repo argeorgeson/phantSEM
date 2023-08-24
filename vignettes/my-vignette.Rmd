@@ -77,7 +77,7 @@ Step1 <- SA_step1(lavoutput=fit_obs,
                   mod_phant = Phantom_Model)
 ```
 
-This function prints the names of the phantom covariance parameters which will be used in the next function. Those parameters are: "CovM1M2","CovM1X","CovM1Y2","CovY1M1","CovY1M2","CovY1X","CovY1Y2","VarM1M1","VarY1Y1".  The function also provides the names of the observed covariance parameters for the user's reference. 
+This function prints the names of the phantom covariance parameters which will be used in the next function. Those parameters are: "CovM1M2","CovM1X","CovM1Y2","CovY1M1","CovY1M2","CovY1X","CovY1Y2","VarM1","VarY1".  The function also provides the names of the observed covariance parameters for the user's reference. 
 
 ### SA_step2 
 The second step of the sensitivity analysis is to create covariance matrices that the phantom model will be fit to. To do this, the user must provide information about how the phantom variables covary with the observed variables.  For this example, the user may wish to test different values for "CovM1M2", "CovY1Y2", "CovY1M2" and "CovM1Y2" and fix the other phantom covariances to single values. The easiest way to create the arguments for SA_step2 is to copy and paste the list of parameter names from SA_step1 and remove the names of the parameters they want to vary. 
@@ -86,8 +86,8 @@ The second step of the sensitivity analysis is to create covariance matrices tha
 fixed_names <- c("CovM1X",
                  "CovY1M1",
                  "CovY1X",
-                 "VarM1M1",
-                 "VarY1Y1")
+                 "VarM1",
+                 "VarY1")
 ```
 
 Now that the phantom parameters that will be fixed to single values have been put into a vector, the user must define a vector of the same length that provides the values that these parameters will be fixed at. For this example, random assignment would suggest that CovM1X and CovY1X would be zero and the variances for the phantom variables can be set at 1. That leaves CovY1M1, which can be fixed to be equal to CovY2M2
