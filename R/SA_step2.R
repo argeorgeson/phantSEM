@@ -37,13 +37,13 @@ SA_step2 <- function(phantom_assignment, # list of all phantom parameter names w
 
 # covariance names set to another named value
   charvaltable <- unlist(pa[sapply(pa,is.character)])
-  charvaltable <-setNames(charvaltable,NULL)
+  charvaltable <-stats::setNames(charvaltable,NULL)
 
 
   #this returns the rows that have an observed parameter value
-char_obs <- subset(cov_map,covname %in% charvaltable & !is.na(val))
+char_obs <- subset(cov_map$covname %in% charvaltable & !is.na(covname$val))
  # covariances equal to other values
-eqseq <- subset(cov_map,covname %in% charvaltable & is.na(val))[,1]
+eqseq <- subset(cov_map$covname %in% charvaltable & is.na(covname$val))[,1]
 
 # covariances that are going to be varied
 seqvaltable <- lapply(pa, function(x) if (is.numeric(x) & length(x)>1) x )
