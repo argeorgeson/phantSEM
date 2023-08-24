@@ -19,7 +19,7 @@ my <- round(CorMY,1)
 
 
 obs2 <- obs2
-cond_id <- obs2 %>% filter(round(corxm,1)==xm, round(corxy,1)==xy, round(cormy,1)==my)
+cond_id <- obs2 %>% filter(round(obs2$corxm,1)==xm, round(obs2$corxy,1)==xy, round(obs2$cormy,1)==my)
 
 #check to see if
 if (nrow(cond_id)==0) {
