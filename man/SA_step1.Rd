@@ -19,3 +19,26 @@ a list containing the names of all phantom covariance parameters.
 \description{
 \code{SA_step1()} identifies the phantom variables and generates names for their covariance parameters that will be used in SA_step2().
 }
+\examples{
+# covariance matrix
+covmatrix<- matrix(c(0.25, 0.95,  0.43,
+                     0.95, 8.87,  2.66,
+                     0.43, 2.66, 10.86),nrow=3, byrow=T)
+colnames(covmatrix) <- c("X","M2","Y2")
+
+# lavann syntax for observed model
+observed <- ' M2 ~ X
+             Y2 ~ M2+X '
+
+# lavaan output
+obs_output <- sem(model=Observed_Model,sample.cov=covmatrix, sample.nobs = 200)
+
+# lavaan syntax for phantom variable model
+phantom <- ' M2 ~ M1 + Y1 + a*X
+               Y2 ~ M1 + Y1 + b*M2 + cp*X '
+
+Step1 <- SA_step1(lavoutput=obs_output,
+                 mod_obs = observed,
+                 mod_phant = phantom)
+
+}
