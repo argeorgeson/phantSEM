@@ -9,6 +9,41 @@
 #' @import dplyr
 #' @import lavaan
 #' @export
+#'
+#' @examples
+# covariance matrix
+#' covmatrix<- matrix(c(0.25, 0.95,  0.43,
+#'                      0.95, 8.87,  2.66,
+#'                      0.43, 2.66, 10.86),nrow=3, byrow=T)
+#' colnames(covmatrix) <- c("X","M2","Y2")
+#'
+#'# lavann syntax for observed model
+#' observed <- ' M2 ~ X
+#'              Y2 ~ M2+X '
+#'
+#' # lavaan output
+#' obs_output <- sem(model=Observed_Model,sample.cov=covmatrix, sample.nobs = 200)
+#'
+#' # lavaan syntax for phantom variable model
+#' phantom <- ' M2 ~ M1 + Y1 + a*X
+#'                Y2 ~ M1 + Y1 + b*M2 + cp*X '
+#'
+#'Step1 <- SA_step1(lavoutput=obs_output,
+#'                  mod_obs = observed,
+#'                  mod_phant = phantom)
+#'
+#' phantom_assignment <- list("CovM1X"=0,
+#'  "CovY1M1" = "CovY2M2",
+#'  "CovY1X"=0,
+#'  "VarM1"=1,
+#'  "VarY1"=1,
+#'  "CovM1M2"=seq(0,.6,.1),
+#'  "CovY1Y2"="CovM1M2",
+#'  "CovY1M2"=seq(-.6,.6,.1),
+#'  "CovM1Y2"="CovY1M2")
+#'  Step2 <- SA_step2(phantom_assignment = phantom_assignment,
+#'                   step1=Step1)
+#'
 SA_step2 <- function(phantom_assignment, # list of all phantom parameter names which tells the function what they should be equal to
                      step1 # previous step
 ) {

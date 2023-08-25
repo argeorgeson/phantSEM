@@ -7,6 +7,16 @@
 #'@import dplyr
 #'@returns Results of a sensitivity analysis with varying cross-lagged and autoregressive correlations.
 #'@export
+#'@examples
+#' #specify correlations
+#' xm <- .2
+#' xy <- .3
+#' my <- .4
+#'
+#' output <- SA_lookup(CorXM=xm,
+#'                     CorXY=xy,
+#'                     CorMY=my)
+
 SA_lookup <- function(
     CorXM,
     CorXY,
