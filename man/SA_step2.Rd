@@ -20,7 +20,7 @@ A list containing test covariance matrices that the phantom model will be fit to
 \examples{
 covmatrix<- matrix(c(0.25, 0.95,  0.43,
                      0.95, 8.87,  2.66,
-                     0.43, 2.66, 10.86),nrow=3, byrow=T)
+                     0.43, 2.66, 10.86),nrow=3, byrow=TRUE)
 colnames(covmatrix) <- c("X","M2","Y2")
 
 # lavann syntax for observed model
