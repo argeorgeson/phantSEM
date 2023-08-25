@@ -1,6 +1,7 @@
 #' Sensitivity Analysis Function Step 1
+#' @description
+#' `SA_step1()` is used to identify the phantom variables and generate names for their covariance parameters. The output of this function will be used in SA_step2().
 #'
-#' `SA_step1()` identifies the phantom variables and generates names for their covariance parameters that will be used in SA_step2().
 #' @param lavoutput The lavaan output object output from lavaan functions sem() or lavaan() when fitting your observed model.
 #' @param mod_obs A lavaan syntax for the observed model.
 #' @param mod_phant A lavaan syntax for the phantom variable model.
