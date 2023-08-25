@@ -19,3 +19,13 @@ Results of a sensitivity analysis with varying cross-lagged and autoregressive c
 \description{
 \code{SA_lookup()} is used to look up the sensitivity analysis results for a two-wave mediation model when provided with the cross-sectional correlations.
 }
+\examples{
+#specify correlations
+xm <- .2
+xy <- .3
+my <- .4
+
+output <- SA_lookup(CorXM=xm,
+                    CorXY=xy,
+                    CorMY=my)
+}

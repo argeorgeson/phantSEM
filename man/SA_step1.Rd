@@ -17,7 +17,7 @@ SA_step1(lavoutput, mod_obs, mod_phant)
 a list containing the names of all phantom covariance parameters.
 }
 \description{
-\code{SA_step1()} identifies the phantom variables and generates names for their covariance parameters that will be used in SA_step2().
+\code{SA_step1()} is used to identify the phantom variables and generate names for their covariance parameters. The output of this function will be used in SA_step2().
 }
 \examples{
 # covariance matrix
