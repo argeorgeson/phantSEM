@@ -21,24 +21,28 @@ a list containing the names of all phantom covariance parameters.
 }
 \examples{
 # covariance matrix
-covmatrix<- matrix(c(0.25, 0.95,  0.43,
-                     0.95, 8.87,  2.66,
-                     0.43, 2.66, 10.86),nrow=3, byrow=TRUE)
-colnames(covmatrix) <- c("X","M2","Y2")
+covmatrix <- matrix(c(
+  0.25, 0.95, 0.43,
+  0.95, 8.87, 2.66,
+  0.43, 2.66, 10.86
+), nrow = 3, byrow = TRUE)
+colnames(covmatrix) <- c("X", "M2", "Y2")
 
 # lavann syntax for observed model
-observed <- ' M2 ~ X
-             Y2 ~ M2+X '
+observed <- " M2 ~ X
+             Y2 ~ M2+X "
 
 # lavaan output
-obs_output <- lavaan::sem(model=observed,sample.cov=covmatrix, sample.nobs = 200)
+obs_output <- lavaan::sem(model = observed, sample.cov = covmatrix, sample.nobs = 200)
 
 # lavaan syntax for phantom variable model
-phantom <- ' M2 ~ M1 + Y1 + a*X
-               Y2 ~ M1 + Y1 + b*M2 + cp*X '
+phantom <- " M2 ~ M1 + Y1 + a*X
+               Y2 ~ M1 + Y1 + b*M2 + cp*X "
 
-Step1 <- SA_step1(lavoutput=obs_output,
-                 mod_obs = observed,
-                 mod_phant = phantom)
+Step1 <- SA_step1(
+  lavoutput = obs_output,
+  mod_obs = observed,
+  mod_phant = phantom
+)
 
 }

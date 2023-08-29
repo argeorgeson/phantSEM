@@ -18,36 +18,44 @@ A list containing test covariance matrices that the phantom model will be fit to
 \code{SA_step2()} is used to assign values to the phantom covariances. There are three options for assigning values to the phantom covariances: 1. Fix phantom covariance to a numeric value (i.e., 0 or 1), 2. Fix phantom covariance to be equal to another covariance, or 3. Test different values for the phantom covariance.
 }
 \examples{
-covmatrix<- matrix(c(0.25, 0.95,  0.43,
-                     0.95, 8.87,  2.66,
-                     0.43, 2.66, 10.86),nrow=3, byrow=TRUE)
-colnames(covmatrix) <- c("X","M2","Y2")
+covmatrix <- matrix(c(
+  0.25, 0.95, 0.43,
+  0.95, 8.87, 2.66,
+  0.43, 2.66, 10.86
+), nrow = 3, byrow = TRUE)
+colnames(covmatrix) <- c("X", "M2", "Y2")
 
 # lavann syntax for observed model
-observed <- ' M2 ~ X
-             Y2 ~ M2+X '
+observed <- " M2 ~ X
+             Y2 ~ M2+X "
 
 # lavaan output
-obs_output <- lavaan::sem(model=observed,sample.cov=covmatrix, sample.nobs = 200)
+obs_output <- lavaan::sem(model = observed, sample.cov = covmatrix, sample.nobs = 200)
 
 # lavaan syntax for phantom variable model
-phantom <- ' M2 ~ M1 + Y1 + a*X
-               Y2 ~ M1 + Y1 + b*M2 + cp*X '
+phantom <- " M2 ~ M1 + Y1 + a*X
+               Y2 ~ M1 + Y1 + b*M2 + cp*X "
 
-Step1 <- SA_step1(lavoutput=obs_output,
-                 mod_obs = observed,
-                 mod_phant = phantom)
+Step1 <- SA_step1(
+  lavoutput = obs_output,
+  mod_obs = observed,
+  mod_phant = phantom
+)
 
-phantom_assignment <- list("CovM1X"=0,
- "CovY1M1" = "CovY2M2",
- "CovY1X"=0,
- "VarM1"=1,
- "VarY1"=1,
- "CovM1M2"=seq(0,.6,.1),
- "CovY1Y2"="CovM1M2",
- "CovY1M2"=seq(-.6,.6,.1),
- "CovM1Y2"="CovY1M2")
- Step2 <- SA_step2(phantom_assignment = phantom_assignment,
-                  step1=Step1)
+phantom_assignment <- list(
+  "CovM1X" = 0,
+  "CovY1M1" = "CovY2M2",
+  "CovY1X" = 0,
+  "VarM1" = 1,
+  "VarY1" = 1,
+  "CovM1M2" = seq(0, .6, .1),
+  "CovY1Y2" = "CovM1M2",
+  "CovY1M2" = seq(-.6, .6, .1),
+  "CovM1Y2" = "CovY1M2"
+)
+Step2 <- SA_step2(
+  phantom_assignment = phantom_assignment,
+  step1 = Step1
+)
 
 }
