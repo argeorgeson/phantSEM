@@ -21,7 +21,7 @@
 #'              Y2 ~ M2+X '
 #'
 #' # lavaan output
-#' obs_output <- sem(model=Observed_Model,sample.cov=covmatrix, sample.nobs = 200)
+#' obs_output <- sem(model=observed,sample.cov=covmatrix, sample.nobs = 200)
 #'
 #' # lavaan syntax for phantom variable model
 #' phantom <- ' M2 ~ M1 + Y1 + a*X
