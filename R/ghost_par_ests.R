@@ -5,6 +5,7 @@
 #' @param parameter_label The label used for the parameter in the lavaan code.
 #' @param remove_NA Remove rows for combinations of phantom variable parameters that resulted in inadmissable solutions in lavaan.
 #' @returns A dataframe of the parameter estimates from the lavaan model.
+#' @importFrom("stats","na.omit")
 #' @export
 
 
@@ -55,7 +56,7 @@ ghost_par_ests <- function(step3,
   #out <- cbind(combos, out)
 
   if (remove_NA == TRUE) {
-    out <- na.omit(out)
+    out <- stats::na.omit(out)
 
   }
 
