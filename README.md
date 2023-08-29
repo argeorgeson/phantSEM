@@ -4,6 +4,8 @@
 # phantSEM
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/argeorgeson/phantSEM/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/argeorgeson/phantSEM/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of phantSEM is to make it easier to create phantom variables,
