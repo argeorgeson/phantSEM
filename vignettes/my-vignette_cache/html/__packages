@@ -1,4 +1,11 @@
-ghostR
+base
+methods
+datasets
+utils
+grDevices
+graphics
+stats
+phantSEM
 lavaan
 tidyr
 tidyverse
@@ -10,4 +17,3 @@ dplyr
 stringr
 forcats
 lubridate
-phantSEM
