@@ -1,0 +1,83 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# phantSEM
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of phantSEM is to make it easier to create phantom variables, which are variables that were not observed, for the purpose of sensitivity analyses for structural equation models. The package allows a user to test different combinations of covariances between the phantom variable(s) and observed variables. 
+
+
+## Installation
+
+You can install the development version of phantSEM from [GitHub](https://github.com/argeorgeson/phantSEM) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("argeorgeson/phantSEM")
+```
+
+## Example
+
+This is an example that shows you how to use the package.  Assume that you have a simple mediation model with three variables, X, M2, and Y2. You can use the phantSEM package to create phantom variables for baseline observations of M and Y. 
+
+```{r example}
+library(phantSEM)
+## basic example code
+ covmatrix<- matrix(c(0.25, 0.95,  0.43,
+                      0.95, 8.87,  2.66,
+                      0.43, 2.66, 10.86),nrow=3, byrow=TRUE)
+ colnames(covmatrix) <- c("X","M2","Y2")
+
+# lavann syntax for observed model
+ observed <- ' M2 ~ X
+              Y2 ~ M2+X '
+
+ # lavaan output
+ obs_output <- lavaan::sem(model=observed,sample.cov=covmatrix, sample.nobs = 200)
+
+ summary(obs_output)
+ # lavaan syntax for phantom variable model
+ phantom <- ' M2 ~ M1 + Y1 + a*X
+                Y2 ~ M1 + Y1 + b*M2 + cp*X '
+
+Step1 <- SA_step1(lavoutput=obs_output,
+                  mod_obs = observed,
+                  mod_phant = phantom)
+
+ phantom_assignment <- list("CovM1X"=0,
+  "CovY1M1" = "CovY2M2",
+  "CovY1X"=0,
+  "VarM1"=1,
+  "VarY1"=1,
+  "CovM1M2"=seq(0,.6,.1),
+  "CovY1Y2"="CovM1M2",
+  "CovY1M2"=seq(-.6,.6,.1),
+  "CovM1Y2"="CovY1M2")
+  Step2 <- SA_step2(phantom_assignment = phantom_assignment,
+                   step1=Step1)
+  Step3 <- SA_step3(step2=Step2,
+                    n=200)
+  
+  b_results <- ghost_par_ests(step3=Step3,
+                             parameter_label="b",
+                             remove_NA=TRUE)
+  
+  head(b_results)
+
+```
+
+
