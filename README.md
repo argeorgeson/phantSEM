@@ -4,8 +4,6 @@
 # phantSEM
 
 <!-- badges: start -->
-
-[![R-CMD-check](https://github.com/argeorgeson/phantSEM/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/argeorgeson/phantSEM/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of phantSEM is to make it easier to create phantom variables,
@@ -34,28 +32,32 @@ baseline observations of M and Y.
 ``` r
 library(phantSEM)
 ## basic example code
- covmatrix<- matrix(c(0.25, 0.95,  0.43,
-                      0.95, 8.87,  2.66,
-                      0.43, 2.66, 10.86),nrow=3, byrow=TRUE)
- colnames(covmatrix) <- c("X","M2","Y2")
+covmatrix <- matrix(c(
+  0.25, 0.95, 0.43,
+  0.95, 8.87, 2.66,
+  0.43, 2.66, 10.86
+), nrow = 3, byrow = TRUE)
+colnames(covmatrix) <- c("X", "M2", "Y2")
 
 # lavann syntax for observed model
- observed <- ' M2 ~ X
-              Y2 ~ M2+X '
+observed <- " M2 ~ X
+              Y2 ~ M2+X "
 
- # lavaan output
- obs_output <- lavaan::sem(model=observed,sample.cov=covmatrix, sample.nobs = 200)
+# lavaan output
+obs_output <- lavaan::sem(model = observed, sample.cov = covmatrix, sample.nobs = 200)
 
- summary(obs_output)
+summary(obs_output)
 #> Length  Class   Mode 
 #>      1 lavaan     S4
- # lavaan syntax for phantom variable model
- phantom <- ' M2 ~ M1 + Y1 + a*X
-                Y2 ~ M1 + Y1 + b*M2 + cp*X '
+# lavaan syntax for phantom variable model
+phantom <- " M2 ~ M1 + Y1 + a*X
+                Y2 ~ M1 + Y1 + b*M2 + cp*X "
 
-Step1 <- SA_step1(lavoutput=obs_output,
-                  mod_obs = observed,
-                  mod_phant = phantom)
+Step1 <- SA_step1(
+  lavoutput = obs_output,
+  mod_obs = observed,
+  mod_phant = phantom
+)
 #> Here are the phantom covariance matrix parameters (copy and paste and add values/names for step2):
 #> 
 #> 
@@ -74,17 +76,21 @@ Step1 <- SA_step1(lavoutput=obs_output,
 #> [1] "CovXM2"  "CovXY2"  "CovY2M2"
 #> Choose which values you want to use for your fixed parameters and put their names in a vector (fixed_values). Make sure the order is the same for both vectors.
 
- phantom_assignment <- list("CovM1X"=0,
+phantom_assignment <- list(
+  "CovM1X" = 0,
   "CovY1M1" = "CovY2M2",
-  "CovY1X"=0,
-  "VarM1"=1,
-  "VarY1"=1,
-  "CovM1M2"=seq(0,.6,.1),
-  "CovY1Y2"="CovM1M2",
-  "CovY1M2"=seq(-.6,.6,.1),
-  "CovM1Y2"="CovY1M2")
-  Step2 <- SA_step2(phantom_assignment = phantom_assignment,
-                   step1=Step1)
+  "CovY1X" = 0,
+  "VarM1" = 1,
+  "VarY1" = 1,
+  "CovM1M2" = seq(0, .6, .1),
+  "CovY1Y2" = "CovM1M2",
+  "CovY1M2" = seq(-.6, .6, .1),
+  "CovM1Y2" = "CovY1M2"
+)
+Step2 <- SA_step2(
+  phantom_assignment = phantom_assignment,
+  step1 = Step1
+)
 #> [1] 1
 #> [1] 2
 #> [1] 3
@@ -98,14 +104,18 @@ Step1 <- SA_step1(lavoutput=obs_output,
 #> [1] 1
 #> [1] TRUE
 #> [1] 1
-  Step3 <- SA_step3(step2=Step2,
-                    n=200)
-  
-  b_results <- ghost_par_ests(step3=Step3,
-                             parameter_label="b",
-                             remove_NA=TRUE)
-  
-  head(b_results)
+Step3 <- SA_step3(
+  step2 = Step2,
+  n = 200
+)
+
+b_results <- ghost_par_ests(
+  step3 = Step3,
+  parameter_label = "b",
+  remove_NA = TRUE
+)
+
+head(b_results)
 #>            rep lhs op rhs label       est         se         z       pvalue
 #> reptemp      1  Y2  ~  M2     b 1.1355601 0.09909786 11.458977 0.000000e+00
 #> reptemp.7    8  Y2  ~  M2     b 0.6082658 0.10339672  5.882834 4.032996e-09
