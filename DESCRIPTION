@@ -22,6 +22,6 @@ Suggests:
 VignetteBuilder: 
     knitr
 Depends: 
-    R (>= 3.5.0)
+    R (>= 3.5.1)
 Config/testthat/edition: 3
 License: MIT + file LICENSE
