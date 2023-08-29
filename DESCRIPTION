@@ -1,12 +1,15 @@
 Package: phantSEM
-Title: An R Package for Sensitivity Analyses in Structural Equation Models with Phantom Variables
+Title: Create Phantom Variables in Structural Equation Models for Sensitivity Analyses 
 Version: 0.0.0.9000
 Authors@R: 
-    person("Alexis", "Georgeson", , "georgeson.alexis@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: This package allows you to create phantom variables to assess 
-    temporal bias or confounding bias in SEM models that do not have a mean 
-    structure.
+    person("Alexis", "Georgeson", , "georgeson.alexis@gmail.com", role = c("aut", "cre","cph"),
+           comment = c(ORCID = "0000-0002-6426-9258"))
+Description: This package allows a user to create phantom variables, which are variables 
+that were not observed, for the purpose of sensitivity analyses for structural equation models. 
+The package makes it easier for a user to test different combinations of covariances between 
+the phantom variable(s) and observed variables.  the phantom variables and observed variables.
+creating phantom variables. The package may be used to assess a model's or effect's sensitivity 
+to temporal bias (e.g., if cross-sectional data were collected) or confounding bias. 
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
