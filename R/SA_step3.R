@@ -5,6 +5,7 @@
 #' @param n The sample size.
 #' @returns A list of parameter estimates from each test covariance matrix.
 #' @import lavaan
+#' @importFrom lavaan sem
 #' @export
 #' @examples
 #' #' @examples

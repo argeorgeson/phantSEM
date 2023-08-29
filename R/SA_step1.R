@@ -7,6 +7,7 @@
 #' @param mod_phant A lavaan syntax for the phantom variable model.
 #' @returns a list containing the names of all phantom covariance parameters.
 #' @import lavaan
+#' @importFrom lavaan sem
 #' @export
 #' @examples
 #' # covariance matrix

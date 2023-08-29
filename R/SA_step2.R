@@ -8,6 +8,7 @@
 #' @import tidyr
 #' @import dplyr
 #' @import lavaan
+#' @importFrom lavaan sem
 #' @export
 #'
 #' @examples
