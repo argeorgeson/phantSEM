@@ -4,8 +4,8 @@ datasets
 utils
 grDevices
 graphics
-stats
 phantSEM
+stats
 lavaan
 tidyr
 tidyverse
