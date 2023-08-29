@@ -1,11 +1,4 @@
-base
-methods
-datasets
-utils
-grDevices
-graphics
 phantSEM
-stats
 lavaan
 tidyr
 tidyverse
