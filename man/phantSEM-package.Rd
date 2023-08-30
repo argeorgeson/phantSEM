@@ -6,7 +6,7 @@
 \alias{phantSEM-package}
 \title{phantSEM: Create Phantom Variables in Structural Equation Models for Sensitivity Analyses}
 \description{
-This package allows a user to create phantom variables, which are variables that were not observed, for the purpose of sensitivity analyses for structural equation models. The package makes it easier for a user to test different combinations of covariances between the phantom variable(s) and observed variables. The package may be used to assess a model's or effect's sensitivity to temporal bias (e.g., if cross-sectional data were collected) or confounding bias.
+Create phantom variables, which are variables that were not observed, for the purpose of sensitivity analyses for structural equation models. The package makes it easier for a user to test different combinations of covariances between the phantom variable(s) and observed variables. The package may be used to assess a model's or effect's sensitivity to temporal bias (e.g., if cross-sectional data were collected) or confounding bias.
 }
 \author{
 \strong{Maintainer}: Alexis Georgeson \email{georgeson.alexis@gmail.com} (\href{https://orcid.org/0000-0002-6426-9258}{ORCID}) [copyright holder]

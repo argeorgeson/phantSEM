@@ -16,6 +16,12 @@ variable(s) and observed variables.
 
 ## Installation
 
+You can install phantSEM from CRAN:
+
+``` r
+install.packages("phantSEM")
+```
+
 You can install the development version of phantSEM from
 [GitHub](https://github.com/argeorgeson/phantSEM) with:
 
@@ -133,3 +139,8 @@ head(b_results)
 #> reptemp.15 0.5023321 0.8766300
 #> reptemp.16 0.9716704 1.2773060
 ```
+
+## Help
+
+If you encounter errors in the package, please file an issue with a
+minimal reproducible example on Github or email the package maintainer.

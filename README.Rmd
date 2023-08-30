@@ -23,6 +23,11 @@ The goal of phantSEM is to make it easier to create phantom variables, which are
 
 
 ## Installation
+You can install phantSEM from CRAN:
+```{r, eval=FALSE}
+install.packages("phantSEM")
+```
+
 
 You can install the development version of phantSEM from [GitHub](https://github.com/argeorgeson/phantSEM) with:
 
@@ -30,6 +35,7 @@ You can install the development version of phantSEM from [GitHub](https://github
 # install.packages("devtools")
 devtools::install_github("argeorgeson/phantSEM")
 ```
+
 
 ## Example
 
@@ -91,5 +97,6 @@ b_results <- ghost_par_ests(
 
 head(b_results)
 ```
-
+## Help
+If you encounter errors in the package, please file an issue with a minimal reproducible example on Github or email the package maintainer. 
 
