@@ -51,10 +51,12 @@ results_noNA <- readRDS("G:/My Drive/ASU/Dave lab/temporal bias/Manuscript/Revis
 #saveRDS(results_noNA,"G:/My Drive/ASU/Dave lab/temporal bias/Manuscript/Revision/Lookup Table/lookup_table_noNA_saverds.rds",compress="xz")
 
 
-results_smaller <- results_noNA[,c(1:5,8:9,14)]
+results_smaller <- results_noNA[,c(1:5,9,14)]
+
+results_smaller$cond <- as.integer(results_smaller$cond)
 
 
-results_smaller <- readRDS("G:/My Drive/ASU/Dave lab/temporal bias/Manuscript/Revision/Lookup Table/lookup_table_noNA_small.rds")
+#results_smaller <- readRDS("G:/My Drive/ASU/Dave lab/temporal bias/Manuscript/Revision/Lookup Table/lookup_table_noNA_small.rds")
 
 # this puts it in the package
 usethis::use_data(results_smaller, obs2, internal = TRUE, overwrite=TRUE, compress = "xz")
