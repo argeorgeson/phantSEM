@@ -37,7 +37,7 @@ SA_lookup <- function(
   }
 
 
-  filt_results <- results_noNA[which(results_noNA$cond == cond_id[, 4]), ]
+  filt_results <- results_smaller[which(results_smaller$cond == cond_id[, 4]), ]
 
   return(filt_results)
 }
