@@ -49,9 +49,9 @@ phantom_assignment <- list(
   "CovY1X" = 0,
   "VarM1" = 1,
   "VarY1" = 1,
-  "CovM1M2" = seq(0, .6, .1),
+  "CovM1M2" = seq(.4, .6, .1),
   "CovY1Y2" = "CovM1M2",
-  "CovY1M2" = seq(-.6, .6, .1),
+  "CovY1M2" = seq(.1, .3, .1),
   "CovM1Y2" = "CovY1M2"
 )
 Step2 <- SA_step2(
