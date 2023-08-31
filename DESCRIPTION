@@ -1,6 +1,6 @@
 Package: phantSEM
 Title: Create Phantom Variables in Structural Equation Models for Sensitivity Analyses 
-Version: 0.0.0.9000
+Version: 1.0.0.0000
 Authors@R: 
     person("Alexis", "Georgeson", , "georgeson.alexis@gmail.com", role = c("aut", "cre","cph"),
            comment = c(ORCID = "0000-0002-6426-9258"))
