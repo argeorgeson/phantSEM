@@ -26,7 +26,7 @@ In this vignette, a full example is illustrated using the functions of `phantSEM
 ## Cross-sectional Mediation 
 The example that we will use to illustrate the use of `phantSEM` is one in which we have fit a cross-sectional mediation model and would like to see if our estimates of the mediated effect would hold if we had collected an additional wave of data.  To start, we will load the packages we need. 
 ```{r setup, message=FALSE, results="hide"}
-devtools::install_github("argeorgeson/phantSEM")
+
 library(phantSEM)
 library(lavaan)
 library(tidyr)
