@@ -1,6 +1,6 @@
 library(lavaan)
 
-test_that("SA_step1 returns a list of length 7", {
+test_that("SA_step1 returns a list of length 8", {
   mod_obs <-
     " Y2 ~ X + M2
     M2 ~ X"
@@ -14,7 +14,7 @@ test_that("SA_step1 returns a list of length 7", {
   colnames(cov) <- rownames(cov)
 
   lavoutput <- sem(model = mod_obs, sample.cov = cov, sample.nobs = 50)
-  expect_equal(length(SA_step1(lavoutput, mod_obs, mod_phant)), 7)
+  expect_equal(length(SA_step1(lavoutput, mod_obs, mod_phant)), 8)
 })
 
 
