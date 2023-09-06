@@ -123,7 +123,7 @@ SA_step2 <- function(phantom_assignment, # list of all phantom parameter names w
   for (i in seq_along(pa)) {
     if (is.numeric(pa[[i]]) && length(pa[[i]]) > 1) {
       j <- j + 1
-      print(j)
+      #print(j)
       testnametable <- rbind(testnametable, names(pa)[i])
       testnamelist[[j]] <- list(name = names(pa)[i], values = pa[[i]])
     }
@@ -139,16 +139,16 @@ SA_step2 <- function(phantom_assignment, # list of all phantom parameter names w
   j <- j
   for (i in length(defaultname)) {
     j <- j + 1
-    print(j)
+   # print(j)
     testnametable <- rbind(testnametable, defaultname[i])
     testnamelist[[j]] <- list(name = defaultname[i], values = seq(-.3, .3, .1))
   }
 
 
-  # make sure the phantom variable name is correct
-  for (i in 1:nrow(phantomnametable)) {
-    print(phantomnametable[i, 2] %in% testnametable[, 1])
-  }
+  # make sure the phantom variable name is correct --removed
+ # for (i in 1:nrow(phantomnametable)) {
+#    print(phantomnametable[i, 2] %in% testnametable[, 1])
+ # }
 
   # make sure that when there are phantom variables equal to other phantom variables, the phantom variable name is correct
   stopifnot(
@@ -219,9 +219,9 @@ SA_step2 <- function(phantom_assignment, # list of all phantom parameter names w
       # print(length(ind[[i]]))
       # if(length(ind[[i]])<1)
       if (is.na(ind_ref[[i]][2])) {
-        print(is.na(ind_ref[[i]][2]))
+        #print(is.na(ind_ref[[i]][2]))
         vals[i] <- as.numeric(fixed_values[i])
-        print(vals[i])
+        #print(vals[i])
       } else {
         vals[i] <- (matrix_template[ind_ref[[i]]])
       }
@@ -249,7 +249,7 @@ SA_step2 <- function(phantom_assignment, # list of all phantom parameter names w
       if (name_na[j] %in% unlist(test_names)) {
 
       } else {
-        print(name_na[j])
+        #print(name_na[j])
         phant_default <- rbind(phant_default, name_na[j])
       }
       # print(name_na[j] %in% unlist(test_names))
