@@ -145,3 +145,5 @@ head(b_results)
 If you encounter errors in the package, please file an issue with a
 minimal reproducible example on Github or email the package maintainer.
 A line I wrote on my local computer 
+A line I wrote on my local computer 2
+A line I wrote on my local computer 2
